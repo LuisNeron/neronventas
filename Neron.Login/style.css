@@ -1,0 +1,418 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+:root {
+  --gold: #bda46c;
+  --black: #111;
+  --white: #fff;
+  --neron-bg: rgb(34, 34, 34);
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+* {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+
+
+body {
+  margin: 0;
+  background-color: var(--neron-bg);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* --- ESTRUCTURA PRINCIPAL --- */
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1600px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* --- PANEL IZQUIERDO --- */
+.left-panel {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 400px;
+  margin-top: -270px;
+}
+
+.actualizaciones-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 220px;
+  height: 320px;
+  overflow: hidden;
+  position: relative;
+}
+
+.titulo-actualizaciones {
+  color: var(--white);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.5rem 0;
+  cursor: pointer;
+}
+
+.lista-actualizaciones {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.75rem;
+  text-align: left;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.lista-actualizaciones li {
+  color: var(--gold);
+  padding: 2px 0;
+  border: none;
+  transition: color 0.2s ease;
+  cursor: pointer;
+}
+
+.lista-actualizaciones li:hover {
+  color: #ffcc66;
+  font-size: 0.8rem;
+  text-decoration: underline;
+}
+
+/* Scroll elegante */
+.lista-actualizaciones::-webkit-scrollbar {
+  width: 6px;
+}
+.lista-actualizaciones::-webkit-scrollbar-thumb {
+  background-color: rgba(189, 164, 108, 0.5);
+  border-radius: 3px;
+}
+
+/* --- PANEL CENTRAL --- */
+.center-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 420px;
+  position: relative;
+}
+
+.subtitle {
+  color: var(--gold);
+}
+
+.version {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.header-licencia {
+  display: flex;
+  justify-content: center;
+  width: 100vh;
+  padding-bottom: 10px;
+}
+
+.licencia {
+  font-size: 0.8rem;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  text-align: center;
+  width: fit-content;
+}
+
+/* --- Aviso de copiado encima del número --- */
+.licencia-numero {
+  position: relative;
+  cursor: pointer;
+  color: var(--gold);
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.licencia-numero:hover {
+  color: #ffcc66;
+  text-decoration: underline;
+}
+
+.copiado-aviso {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: #ffcc66;
+  background-color: var(--neron-bg);
+  padding: 3px 8px;
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(255, 204, 102, 0.3);
+  animation: fadeInOut 1.5s ease forwards;
+  white-space: nowrap;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -6px); }
+  20% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
+
+/* --- LOGIN BOX --- */
+.login-box {
+  /* background-color: rgba(255, 255, 255, 0.02); */
+  padding: 3rem;
+  border-radius: 15px;
+  /* box-shadow: 0 0 25px rgb(189 164 108 / 15%); */
+}
+
+.logo {
+  width: 300px;
+  margin-bottom: 1rem;
+}
+
+/* --- INPUT CLAVE + OJITO --- */
+.input-area {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 0.6rem 2.6rem 0.6rem 0.6rem; /* espacio para el icono */
+  font-size: 1rem;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--white);
+  text-align: center;
+  outline: none;
+  margin: 0 auto;
+}
+
+/* --- BOTÓN DE OJO SIN EFECTOS --- */
+.toggle-clave {
+  position: absolute;
+  right: -10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+.toggle-clave img {
+  width: 22px;
+  height: 22px;
+  filter: brightness(0) saturate(100%) invert(78%) sepia(45%) saturate(376%) hue-rotate(10deg) brightness(94%) contrast(85%);
+}
+
+/* ❌ SIN hover, ni cambios de color ni sombra */
+.toggle-clave:hover img,
+.toggle-clave:focus img,
+.toggle-clave:active img {
+  filter: brightness(0) saturate(100%) invert(78%) sepia(45%) saturate(376%) hue-rotate(10deg) brightness(94%) contrast(85%);
+  box-shadow: none;
+  transform: none;
+}
+
+/* --- TECLADO NUMÉRICO --- */
+.keypad {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 60px);
+  gap: 10px;
+}
+
+button {
+  background-color: var(--gold);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--black);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+
+button.close,
+button.clear,
+button.enter {
+  background-color: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+}
+
+button.enter:hover {
+  background-color: var(--gold);
+  color: var(--black);
+}
+
+/* --- FOOTER --- */
+footer {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #777;
+  text-align: center;
+  width: 100vh;
+}
+
+/* --- PANEL DERECHO --- */
+.right-panel {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: -550px;
+}
+
+.soporte-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--gold);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #4c4c4c;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.soporte-top img {
+  width: 40px;
+  height: 40px;
+}
+/* --- MENÚ SOPORTE --- */
+.soporte-container {
+  position: relative;
+}
+
+.soporte-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  flex-direction: column;
+  background-color: var(--neron-bg);
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  padding: 8px 0;
+  min-width: 160px;
+  box-shadow: 0 0 15px rgba(189, 164, 108, 0.25);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.soporte-menu button {
+  width: 100%;
+  background: transparent;
+  color: var(--gold);
+  border: none;
+  text-align: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(189, 164, 108, 0.15);
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.soporte-menu button:last-child {
+  border-bottom: none;
+}
+
+.soporte-menu button:hover {
+  background-color: var(--gold);
+  color: var(--black);
+  transform: scale(1.03);
+}
+
+.container-tlf-neron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-direction: column;
+    cursor: default;
+}
+
+.tlf-neron {
+  width: 100px;
+  height: 30px;
+  padding-top: 10px;
+  margin-right: 10px;
+}
+
+/* Desactiva hover en el botón del teléfono */
+.container-tlf-neron .tlf-contacto:hover {
+  background-color: transparent !important;
+  color: var(--gold) !important;
+  transform: none !important;
+  cursor: default !important;
+}
+
+.container-tlf-contacto img {
+  width: 14px;          /* más pequeño que el número */
+  height: 14px;
+  margin-right: 4px;    /* un pequeño espacio entre icono y número */
+  filter: brightness(0) saturate(100%) invert(80%) sepia(50%) hue-rotate(20deg); /* opcional: lo tiñe dorado si querés */
+}
+
+.container-tlf-contacto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.tlf-contacto {
+  font-size: 0.85rem;
+  background: transparent;
+  color: var(--gold);
+  border: none;
+  cursor: default;
+  padding: 0;
+}
+

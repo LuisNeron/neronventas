@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nerón Software</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <img src="/img/logo-neron.png" alt="Nerón Software" class="logo">
+    <div id="clock">11:38:20</div>
+  </header>
+
+  <main>
+    <section class="operators">
+      <button class="operator">COSMIN</button>
+      <button class="operator">ADMINISTRADOR</button>
+      <button class="operator">ANGEL 3</button>
+      <button class="operator">TERE 4</button>
+      <button class="operator">JULIA 6</button>
+      <button class="operator">NIEVES 7</button>
+    </section>
+
+    <aside class="sidebar">
+      <button class="action">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>MOSTRAR</span>
+      </button>
+
+      <button class="action">
+        <i class="fa-solid fa-user-minus"></i>
+        <span>OCULTAR</span>
+      </button>
+
+      <button class="action">
+        <i class="fa-solid fa-list"></i>
+        <span>VENTAS PENDIENTES DE<br>OPERADOR</span>
+      </button>
+
+      <button class="action">
+        <i class="fa-solid fa-list-check"></i>
+        <span>TODAS LAS VENTAS<br>PENDIENTES</span>
+      </button>
+      
+        <button class="action">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <span>VENTAS DEL DÍA</span>
+
+      <button class="action">
+        <i class="fa-solid fa-rotate-right"></i>
+        <span>ACTUALIZAR</span>
+      </button>
+    </aside>
+  </main>
+
+  <script>
+    // Reloj dinámico ⏰
+    const clock = document.getElementById('clock');
+    setInterval(() => {
+      const now = new Date();
+      clock.textContent = now.toLocaleTimeString('es-ES', { hour12: false });
+    }, 1000);
+  </script>
+</body>
+</html>

@@ -78,7 +78,7 @@ titulo.innerHTML = `
            ${abiertas} mesa${abiertas > 1 ? 's' : ''} abierta${abiertas > 1 ? 's' : ''}
            ${pendientes > 0 ? ` · <span class="pendientes">${pendientes} pendientes de cobro</span>` : ''}
          </span>`
-      : `<span class="info-vacia">(sin abiertas)</span>`
+      : `<span class="info-vacia">(ninguna mesa abierta)</span>`
   }
 `;
 
@@ -126,32 +126,43 @@ titulo.innerHTML = `
   // ==========================================================
 function crearMesaDiv(mesa) {
   const div = document.createElement('div');
+  div.classList.add('mesa');
 
-  // 🔴 Detectar estado
   if (mesa.importe == 0) {
-    div.classList.add('mesa', 'libre');
+    div.classList.add('libre');
   } else if (mesa.pendiente) {
-    div.classList.add('mesa', 'pendiente');
+    div.classList.add('pendiente'); // para CSS rojo
   } else {
-    div.classList.add('mesa', 'ocupada');
+    div.classList.add('ocupada');
   }
 
-  // 💰 Contenido base
-  div.innerHTML = `
-    <span class="nombre">${mesa.nombre}</span>
-    <span class="importe">(${parseFloat(mesa.importe).toFixed(2)}€)</span>
-  `;
+  // Nombre + importe
+  const nombreSpan = document.createElement('span');
+  nombreSpan.classList.add('nombre');
+  nombreSpan.textContent = mesa.nombre;
 
-  // 🧾 Si está pendiente (roja), añadimos la imagen factura.svg
+  const importeSpan = document.createElement('span');
+  importeSpan.classList.add('importe');
+  importeSpan.textContent = `(${parseFloat(mesa.importe).toFixed(2)}€)`;
+
+  div.appendChild(nombreSpan);
+  div.appendChild(importeSpan);
+
+  // Icono de factura si está pendiente
   if (mesa.pendiente) {
     const facturaIcon = document.createElement('img');
-    facturaIcon.src = '/img/factura.svg'; // Asegúrate de tener este archivo en la ruta correcta
+    facturaIcon.src = '/img/factura.svg';
     facturaIcon.classList.add('icono-factura');
+    facturaIcon.addEventListener('click', e => {
+      e.stopPropagation();
+      abrirTicket(mesa);
+    });
     div.appendChild(facturaIcon);
   }
 
   return div;
 }
+
 
 
 
@@ -259,8 +270,78 @@ function crearMesaDiv(mesa) {
     });
   }
 
+function abrirTicket(mesa) {
+  const modal = document.getElementById('modalTicket');
+  const nombre = document.getElementById('ticketMesaNombre');
+  const itemsUl = document.getElementById('ticketItems');
+  const totalSpan = document.getElementById('ticketTotal');
+
+  nombre.textContent = mesa.nombre;
+  itemsUl.innerHTML = '';
+
+  let total = 0;
+  mesa.ticket.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span>${item.cantidad} x ${item.nombre}</span> <span>${(item.precio*item.cantidad).toFixed(2)}€</span>`;
+    itemsUl.appendChild(li);
+    total += item.precio * item.cantidad;
+  });
+
+  totalSpan.textContent = total.toFixed(2) + '€';
+  modal.classList.add('activo');
+}
+
+document.getElementById('btnCerrarTicket').addEventListener('click', () => {
+  document.getElementById('modalTicket').classList.remove('activo');
+});
+
+
+
+// Productos de ejemplo para tickets
+const productos = [
+  { nombre: "Café", precio: 1.5 },
+  { nombre: "Té", precio: 1.2 },
+  { nombre: "Bocadillo", precio: 3.5 },
+  { nombre: "Ensalada", precio: 4.2 },
+  { nombre: "Refresco", precio: 2.0 },
+  { nombre: "Cerveza", precio: 2.5 },
+  { nombre: "Postre", precio: 3.0 },
+  { nombre: "Pizza", precio: 6.0 },
+  { nombre: "Hamburguesa", precio: 5.5 }
+];
+
+// Crear tickets aleatorios para cada mesa pendiente
+
+mesasData.forEach(mesa => {
+  if (mesa.pendiente) {
+    const numItems = Math.floor(Math.random() * 5) + 1;
+    mesa.ticket = [];
+    let total = 0;
+
+    for (let i = 0; i < numItems; i++) {
+      const prod = productos[Math.floor(Math.random() * productos.length)];
+      const cantidad = Math.floor(Math.random() * 3) + 1;
+
+      mesa.ticket.push({
+        nombre: prod.nombre,
+        precio: prod.precio,
+        cantidad
+      });
+
+      total += prod.precio * cantidad; // sumamos para el total
+    }
+
+    // Asignamos el total como importe de la mesa
+    mesa.importe = total.toFixed(2);
+  }
+});
+
+
+
+
   // ==========================================================
   // 🚀 Render inicial
   // ==========================================================
   renderMesas('todos');
+
 });

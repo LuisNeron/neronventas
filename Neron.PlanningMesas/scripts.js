@@ -21,14 +21,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   lugares.forEach(lugar => {
     const numMesas = Math.floor(Math.random() * 15) + 1; // mínimo 1, máximo 15
-    for (let i = 1; i <= numMesas; i++) {
-      mesasData.push({
-        id: idCounter++,
-        nombre: `Mesa ${i}`,
-        lugar,
-        importe: Math.random() > 0.7 ? (Math.random() * 50).toFixed(2) : 0
-      });
-    }
+for (let i = 1; i <= numMesas; i++) {
+  const random = Math.random();
+  let importe;
+
+if (random < 0.6) {
+  importe = 0; // libre
+  pendiente = false;
+} else {
+  importe = (Math.random() * 50).toFixed(2); // ocupada o pendiente
+  pendiente = Math.random() > 0.5; // 50% de las ocupadas están pendientes
+}
+
+mesasData.push({
+  id: idCounter++,
+  nombre: `Mesa ${i}`,
+  lugar,
+  importe,
+  pendiente
+});
+
+}
+
   });
 
   // ==========================================================
@@ -41,26 +55,33 @@ function crearBloqueLugar(lugar, grupo) {
   if (grupo.length === 0) return;
 
   const abiertas = grupo.filter(m => parseFloat(m.importe) > 0).length;
+  const pendientes = grupo.filter(m => m.pendiente).length;
 
   const separador = document.createElement('div');
   separador.classList.add('separador-lugar');
 
-  // 🔽 Ícono Bootstrap
+  // 🔽 Ícono Font Awesome para plegar/desplegar
   const icono = document.createElement('i');
-  icono.classList.add('bi', 'bi-caret-down-fill', 'toggle-icon');
+  icono.classList.add('fa-solid', 'fa-caret-down', 'toggle-icon'); // Ícono inicial desplegado
 
+  // 🏷️ Título con nombre + icono + cantidad
   const titulo = document.createElement('div');
   titulo.classList.add('titulo-lugar');
-  titulo.innerHTML = `
-    <span class="nombre-lugar">
-      ${lugar.charAt(0).toUpperCase() + lugar.slice(1)}
-    </span>
-    ${abiertas > 0
-      ? `<span class="info-abiertas">${abiertas} mesa${abiertas > 1 ? 's' : ''} abierta${abiertas > 1 ? 's' : ''}</span>`
-      : `<span class="info-vacia">(sin abiertas)</span>`}
-  `;
+titulo.innerHTML = `
+  <span class="nombre-lugar">
+    ${lugar.charAt(0).toUpperCase() + lugar.slice(1)}
+  </span>
+  <i class="fa-solid fa-caret-down toggle-icon-inline"></i>
+  ${
+    abiertas > 0
+      ? `<span class="info-abiertas">
+           ${abiertas} mesa${abiertas > 1 ? 's' : ''} abierta${abiertas > 1 ? 's' : ''}
+           ${pendientes > 0 ? ` · <span class="pendientes">${pendientes} pendientes de cobro</span>` : ''}
+         </span>`
+      : `<span class="info-vacia">(sin abiertas)</span>`
+  }
+`;
 
-  separador.appendChild(icono);
   separador.appendChild(titulo);
   separador.style.color = coloresLugares[lugar].fondo;
 
@@ -71,13 +92,17 @@ function crearBloqueLugar(lugar, grupo) {
   // 🧩 Click para plegar/desplegar
   separador.addEventListener('click', () => {
     const isCollapsed = contenedorGrupo.classList.toggle('colapsado');
-    icono.classList.toggle('bi-caret-down-fill', !isCollapsed);
-    icono.classList.toggle('bi-caret-right-fill', isCollapsed);
+    const iconos = separador.querySelectorAll('.toggle-icon-inline');
+    iconos.forEach(i => {
+      i.classList.toggle('fa-caret-down', !isCollapsed);
+      i.classList.toggle('fa-caret-right', isCollapsed);
+    });
   });
 
   mainGrid.appendChild(separador);
   mainGrid.appendChild(contenedorGrupo);
 }
+
 
 
 
@@ -99,17 +124,36 @@ function crearBloqueLugar(lugar, grupo) {
   // ==========================================================
   // 🪑 Crear elemento visual de mesa
   // ==========================================================
-  function crearMesaDiv(mesa) {
-    const div = document.createElement('div');
-    div.classList.add('mesa');
-    div.classList.add(parseFloat(mesa.importe) > 0 ? 'ocupada' : 'libre');
+function crearMesaDiv(mesa) {
+  const div = document.createElement('div');
 
-    div.innerHTML = `
-      <span class="nombre">${mesa.nombre}</span>
-      <span class="importe">(${parseFloat(mesa.importe).toFixed(2)}€)</span>
-    `;
-    return div;
+  // 🔴 Detectar estado
+  if (mesa.importe == 0) {
+    div.classList.add('mesa', 'libre');
+  } else if (mesa.pendiente) {
+    div.classList.add('mesa', 'pendiente');
+  } else {
+    div.classList.add('mesa', 'ocupada');
   }
+
+  // 💰 Contenido base
+  div.innerHTML = `
+    <span class="nombre">${mesa.nombre}</span>
+    <span class="importe">(${parseFloat(mesa.importe).toFixed(2)}€)</span>
+  `;
+
+  // 🧾 Si está pendiente (roja), añadimos la imagen factura.svg
+  if (mesa.pendiente) {
+    const facturaIcon = document.createElement('img');
+    facturaIcon.src = '/img/factura.svg'; // Asegúrate de tener este archivo en la ruta correcta
+    facturaIcon.classList.add('icono-factura');
+    div.appendChild(facturaIcon);
+  }
+
+  return div;
+}
+
+
 
   // ==========================================================
   // 🧭 Filtros laterales

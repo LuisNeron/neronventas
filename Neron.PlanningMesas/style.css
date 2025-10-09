@@ -113,6 +113,7 @@ hr {
   user-select: none;
   aspect-ratio: 1/1; /* cuadradas */
   color: #fff;
+  position: relative; /* importante para el posicionamiento absoluto interno */
 }
 
 .mesa.libre {
@@ -124,8 +125,12 @@ hr {
   color: #000;
 }
 
+.mesa.pendiente {
+  background: #c94a40; /* rojo pendiente de cobro */
+  color: #fff;
+}
+
 .mesa:hover {
-  transform: scale(1.05);
   filter: brightness(1.1);
 }
 
@@ -133,6 +138,22 @@ hr {
   font-size: 0.9rem;
   font-weight: 500;
   opacity: 0.85;
+}
+
+/* === ICONO DE FACTURA === */
+.icono-factura {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  opacity: 0.9;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.icono-factura:hover {
+  transform: scale(1.15);
+  opacity: 1;
 }
 
 /* === AGRUPACIÓN POR LUGAR === */
@@ -145,7 +166,6 @@ hr {
 
 /* === SEPARADOR DE LUGAR === */
 /* === Separador de lugar (nombre + contador) === */
-/* === SEPARADOR DE LUGAR === */
 .separador-lugar {
   display: flex;
   align-items: center;
@@ -155,6 +175,8 @@ hr {
   margin: 1.8rem 0 1rem;
   color: var(--color-acento);
   position: relative;
+  cursor: pointer;
+  width: fit-content;
 }
 
 /* Bloque con nombre y contador */
@@ -162,14 +184,14 @@ hr {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.034);
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
   position: relative;
   z-index: 1;
 }
 
-/* Líneas decorativas laterales */
+/* Líneas decorativas laterales
 .separador-lugar::before,
 .separador-lugar::after {
   content: "";
@@ -183,12 +205,12 @@ hr {
 .separador-lugar::before {
   margin-right: 0.8rem;
   max-width: 40px; /* 🔸 controla longitud izquierda */
-}
+/* } */
 
-.separador-lugar::after {
+/* .separador-lugar::after {
   margin-left: 0.8rem;
   max-width: 80px; /* 🔸 controla longitud derecha */
-}
+/* }  */
 
 .nombre-lugar {
   text-transform: uppercase;
@@ -201,6 +223,13 @@ hr {
   opacity: 0.85;
   color: var(--color-texto);
 }
+
+.info-abiertas .pendientes {
+  color: #eb7a71; /* rojo suave para destacar */
+  font-weight: 600;
+  margin-left: 4px;
+}
+
 
 .info-vacia {
   font-size: 0.9rem;
@@ -398,21 +427,25 @@ hr {
 
 /* === ICONO PLEGAR / DESPLEGAR === */
 .toggle-icon {
-  font-size: 1.2rem;
-  margin-right: 0.6rem;
-  transition: transform 0.25s ease;
+  font-size: 1.25rem;
+  margin-right: 0.75rem;
+  transition: transform 0.3s ease;
   cursor: pointer;
   flex-shrink: 0;
+  color: currentColor;
 }
 
-.separador-lugar {
-  cursor: pointer;
-  user-select: none;
+/* Rota suavemente el icono cuando el grupo está colapsado */
+.grupo-lugar.colapsado + .separador-lugar .toggle-icon {
+  transform: rotate(-90deg);
 }
 
+/* === ANIMACIÓN DE DESPLEGADO === */
 .grupo-lugar {
   overflow: hidden;
-  transition: max-height 0.35s ease, opacity 0.3s ease;
+  transition:
+    max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.35s ease;
   max-height: 1000px;
   opacity: 1;
 }
@@ -421,4 +454,20 @@ hr {
   max-height: 0;
   opacity: 0;
   pointer-events: none;
+}
+
+/* Suave aparición cuando se despliega */
+.grupo-lugar:not(.colapsado) {
+  animation: fadeSlideIn 0.35s ease;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -3,8 +3,8 @@
 :root {
   --color-bg: #121212;
   --color-surface: #1c1c1c;
-  --color-primary: #c9ab63;
-  --color-primary-dark: #a88a43;
+  --color-primary: #bda46c;
+  --color-primary-dark: #c9ab63;
   --color-text: #f6f6f6;
   --radius: 14px;
 }
@@ -17,7 +17,8 @@
 }
 
 body {
-  background: radial-gradient(circle at top center, #1c1c1c, #0d0d0d 80%);
+  /* background: radial-gradient(circle at top center, #550ab6, #0d0d0d 80%); */
+  background: radial-gradient(circle at top center, #af2a2a, #0d0d0d 80%);
   color: var(--color-text);
   display: flex;
   flex-direction: column;
@@ -25,6 +26,7 @@ body {
   overflow: hidden;
 }
 
+/* 🔹 HEADER */
 header {
   display: flex;
   justify-content: center;
@@ -50,6 +52,7 @@ header {
   color: var(--color-primary);
 }
 
+/* 🔹 LAYOUT PRINCIPAL */
 main {
   display: flex;
   flex: 1;
@@ -57,7 +60,7 @@ main {
   gap: 2rem;
 }
 
-/* 🟡 Panel de operadores */
+/* 🟡 PANEL DE OPERADORES */
 .operators {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -66,7 +69,6 @@ main {
   align-content: flex-start;
 }
 
-/* ✨ Botones sobrios y robustos */
 .operator {
   background: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark));
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -79,34 +81,49 @@ main {
     inset 0 2px 2px rgba(255, 255, 255, 0.15),
     inset 0 -2px 3px rgba(0, 0, 0, 0.25);
   user-select: none;
+  transition: transform 0.25s ease, filter 0.25s ease;
 }
 
-/* 🔸 Barra lateral */
+.operator:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+}
+
+/* 🔸 PANEL LATERAL DERECHO (ELEGANTE) */
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1rem;
   width: 240px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+  padding: 1.2rem;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* 🎛️ Botones laterales sólidos */
+/* 🎛️ BOTONES DE ACCIÓN */
 .action {
   background: linear-gradient(160deg, var(--color-primary), var(--color-primary-dark));
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: none;
   border-radius: var(--radius);
   color: #111;
   font-weight: 700;
-  padding: 1.3rem 1rem;
+  padding: 1.2rem 1rem;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: .6rem;
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.4),
-    inset 0 2px 2px rgba(255, 255, 255, 0.15);
   user-select: none;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  transform: scale(1);
+}
+
+.action:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
 }
 
 .action i {
@@ -118,15 +135,4 @@ main {
   text-transform: uppercase;
   line-height: 1.1em;
   font-size: 0.85rem;
-}
-
-/* Animación de agrandamiento suave al hacer hover */
-.operator, .action {
-  transition: transform 0.25s ease, filter 0.25s ease;
-  transform: scale(1);
-}
-
-.operator:hover, .action:hover {
-  transform: scale(1.04);
-  filter: brightness(1.08);
 }

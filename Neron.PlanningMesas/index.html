@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano de Mesas - Nerón Hostelería</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- Panel izquierdo -->
+    <aside class="sidebar">
+      <button class="btn-icon">
+        <i class="fa-solid fa-computer"></i>
+        <span>Barra</span>
+      </button>
+
+      <!-- 🔧 Botón de ajustes -->
+      <button class="btn-icon ajustes" id="btnAjustes">
+        <i class="fa-solid fa-gear"></i>
+        <span>Ajustes</span>
+      </button>
+
+<div class="buscador">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="text" id="inputBuscar" placeholder="Buscar mesa..." />
+</div>
+
+
+      <hr>
+      <button class="btn filtro activo">Todos los lugares</button>
+      <button class="btn filtro cafe">Cafetería</button>
+      <button class="btn filtro comedor">Comedor</button>
+      <button class="btn filtro terraza">Terraza</button>
+      <button class="btn filtro meson">Mesón</button>
+      <button class="btn filtro habitacion">Habitación</button>
+    </aside>
+
+    <!-- Zona principal -->
+    <main class="mesas-grid">
+      <!-- 🪑 Las mesas se generan dinámicamente desde scripts.js -->
+    </main>
+  </div>
+
+  <!-- 🪟 Panel de Ajustes -->
+  <div class="modal-ajustes" id="modalAjustes">
+    <div class="modal-contenido">
+      <h2>Ajustes de Vista</h2>
+
+      <h3>Mostrar lugares</h3>
+      <div class="checkboxes">
+        <label><input type="checkbox" id="chkCafeteria" checked> Cafetería</label>
+        <label><input type="checkbox" id="chkComedor" checked> Comedor</label>
+        <label><input type="checkbox" id="chkTerraza" checked> Terraza</label>
+        <label><input type="checkbox" id="chkMeson" checked> Mesón</label>
+        <label><input type="checkbox" id="chkHabitacion" checked> Habitación</label>
+      </div>
+
+      <h3>Lugar por defecto</h3>
+      <select id="selectLugarDefault">
+        <option value="todos">Todos los lugares</option>
+        <option value="cafeteria">Cafetería</option>
+        <option value="comedor">Comedor</option>
+        <option value="terraza">Terraza</option>
+        <option value="meson">Mesón</option>
+        <option value="habitacion">Habitación</option>
+      </select>
+
+      <div class="modal-botones">
+        <button id="btnGuardarAjustes">Guardar</button>
+        <button id="btnCerrarAjustes">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>

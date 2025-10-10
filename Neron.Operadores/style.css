@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 
 :root {
-  --color-bg: #121212;
+  --color-bg: #272727;
   --color-surface: #1c1c1c;
   --color-primary: #bda46c;
   --color-primary-dark: #c9ab63;
@@ -18,7 +18,8 @@
 
 body {
   /* background: radial-gradient(circle at top center, #550ab6, #0d0d0d 80%); */
-  background: radial-gradient(circle at top center, #af2a2a, #0d0d0d 80%);
+  /* background: radial-gradient(circle at top center, #af2a2a, #272727 80%); */
+  background: var(--color-bg);
   color: var(--color-text);
   display: flex;
   flex-direction: column;

@@ -1,0 +1,188 @@
+/* ===========================
+   TOKENS
+   =========================== */
+:root{
+  --bg:#0f1113;
+  --panel:#14171a;
+  --panel-2:#0d0f11;
+  --ink:#e7e7e7;
+  --muted:#a9b0b8;
+  --accent:#d3b36b;
+  --accent-ink:#1b1b1b;
+  --ok:#70e000;
+
+  --radius:14px;
+  --gap:12px;
+  --shadow:0 4px 14px rgba(0,0,0,.35);
+  --trans:.18s ease;
+
+  /* Layout */
+  --leftcol-w: 600px;   /* ancho col. izquierda (Div 2 + Div 4) */
+  --ticket-h: 380px;    /* alto fijo del ticket (Div 2) */
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:15px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell;
+}
+
+.app{display:flex;flex-direction:column;gap:var(--gap);min-height:100dvh;padding:clamp(8px,1.2vw,18px)}
+
+/* ===========================
+   DIV 1: TOOLBAR
+   =========================== */
+.toolbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:var(--gap)}
+.sysbtn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:74px;
+  border-radius:var(--radius);background:#2a2f35;color:var(--ink);box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:transform var(--trans),filter var(--trans),background var(--trans)
+}
+.sysbtn i{font-size:22px;opacity:.95}
+.sysbtn span{font-weight:600;font-size:12px;opacity:.9;text-align:center}
+.sysbtn:hover{filter:brightness(1.05)}
+.sysbtn:active{transform:translateY(1px)}
+.sysbtn--accent{background:var(--accent);color:var(--accent-ink)}
+
+/* ===========================
+   MAIN 2x2: grid-areas
+   =========================== */
+.shell{
+  display:grid;
+  grid-template-columns: var(--leftcol-w) 1fr;
+  grid-template-rows: var(--ticket-h) 1fr;
+  grid-template-areas:
+    "ticket   controls"
+    "familias articulos";
+  gap:var(--gap);
+  flex:1; min-height:0; overflow:hidden;
+}
+
+/* ===========================
+   DIV 2: TICKET (arriba-izq)
+   =========================== */
+.ticket{
+  grid-area: ticket;
+  height:100%;
+  display:flex; flex-direction:column; gap:var(--gap);
+  background:var(--panel); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:12px; min-height:0;
+}
+.ticket-head{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.ticket-head .title{font-weight:800;letter-spacing:.4px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:#2c343b;border:1px solid rgba(255,255,255,.07);padding:8px 12px;border-radius:999px;font-weight:700;font-size:13px}
+
+.ticket-grid{
+  flex:1 1 auto; min-height:0;
+  background:var(--panel-2); border:1px solid rgba(255,255,255,.06); border-radius:10px;
+  overflow:auto; /* vertical + horizontal si hace falta */
+}
+.ticket-table{
+  width:100%; border-collapse:collapse;
+  min-width: 820px; /* habilita scroll horizontal si se estrecha */
+}
+.ticket-table thead th{
+  position:sticky; top:0; z-index:1;
+  background:#1a1f23; color:#d7dee6; text-align:left;
+  font-size:12px; font-weight:700; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.06);
+}
+.ticket-table tbody td{
+  padding:10px 12px; border-bottom:1px dashed rgba(255,255,255,.07); color:#dfe5ec;
+}
+.ticket-actions{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.big-total{font-size:34px; font-weight:900; color:var(--ok)}
+.btn-row{display:flex; gap:10px}
+.iconbtn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:#26303a; border:1px solid rgba(255,255,255,.07);
+  padding:10px 14px; border-radius:12px; cursor:pointer;
+  transition: filter var(--trans), transform var(--trans);
+}
+.iconbtn i{font-size:18px}
+.iconbtn:hover{filter:brightness(1.08)}
+.iconbtn:active{transform:translateY(1px)}
+
+/* ===========================
+   DIV 3: CONTROLS (arriba-der)
+   =========================== */
+.controls{
+  grid-area: controls;
+  display:flex; flex-direction:column; gap:var(--gap);
+  background:transparent; /* sin panel, solo contenido */
+  min-height:0; overflow:hidden;
+}
+.controls .controls-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+}
+.strong{font-weight:900;letter-spacing:.3px}
+.search-input{
+  background:#2c343b; border:1px solid rgba(255,255,255,.07);
+  border-radius:12px; padding:8px 12px; outline:none; color:#e7e7e7; min-width:220px;
+}
+
+/* ===========================
+   DIV 4: FAMILIAS (abajo-izq)
+   =========================== */
+.familias-panel{
+  grid-area: familias;
+  display:flex; flex-direction:column; gap:8px;
+  background:var(--panel); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:12px; min-height:0; overflow:hidden;
+}
+.familias-title{margin:0;font-size:12px;letter-spacing:.4px;opacity:.8;font-weight:800}
+.categories{
+  display:grid; gap:var(--gap);
+  grid-template-columns: 1fr;  /* columna vertical de botones */
+  min-height:0; overflow:auto; padding-right:4px;
+}
+.cat{
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  background:#caa761; color:#161616; border-radius:var(--radius);
+  padding:14px 10px; font-weight:800; min-height:58px;
+  cursor:pointer; transition:filter var(--trans), transform var(--trans);
+  border:1px solid rgba(0,0,0,.15); box-shadow:var(--shadow);
+}
+.cat:hover{filter:brightness(1.05)}
+.cat:active{transform:translateY(1px)}
+
+/* ===========================
+   DIV 5: ARTÍCULOS (abajo-der)
+   =========================== */
+.articles-panel{
+  grid-area: articulos;
+  min-height:0; overflow:hidden; display:flex;
+}
+.products-grid{
+  display:grid; gap:var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  align-content:start; flex:1; min-height:0;
+  overflow:auto; padding-right:6px;
+}
+.prod{
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  padding:16px 12px; border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.07); background:#20303a;
+  font-weight:800; min-height:84px; box-shadow:var(--shadow);
+  cursor:pointer; transition: transform var(--trans), filter var(--trans);
+}
+.prod:hover{filter:brightness(1.06)}
+.prod:active{transform:translateY(1px)}
+
+/* Helpers de color (botones artículo) */
+.is-yellow{background:#ffe16a;color:#222}
+.is-cyan{background:#7cf1ff;color:#0b2230}
+.is-green{background:#74f7a1;color:#0e2216}
+.is-red{background:#ff5b5b;color:#1a0e0e}
+.is-lilac{background:#e5a6ff;color:#220d2a}
+
+/* Scrollbars bonitos */
+.ticket-grid::-webkit-scrollbar,
+.products-grid::-webkit-scrollbar,
+.categories::-webkit-scrollbar{height:10px;width:10px}
+.ticket-grid::-webkit-scrollbar-thumb,
+.products-grid::-webkit-scrollbar-thumb,
+.categories::-webkit-scrollbar-thumb{background:#2f3a44;border-radius:999px}

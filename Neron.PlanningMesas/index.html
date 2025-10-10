@@ -14,6 +14,10 @@
     <!-- Panel izquierdo -->
     <aside class="sidebar">
       <button class="btn-icon">
+        <i class="fa-solid fa-user"></i>
+        <span>Administrador</span>
+      </button>
+      <button class="btn-icon">
         <i class="fa-solid fa-computer"></i>
         <span>Barra</span>
       </button>
@@ -29,6 +33,17 @@
   <input type="text" id="inputBuscar" placeholder="Buscar mesa..." />
 </div>
 
+<!-- 🔽 NUEVO: filtros de estado -->
+<div class="estado-filtros">
+  <label class="chk">
+    <input type="checkbox" id="chkConPedido">
+    <span>Mesas Abiertas</span>
+  </label>
+  <label class="chk">
+    <input type="checkbox" id="chkPendiente">
+    <span>Pendientes de cobro</span>
+  </label>
+</div>
 
       <hr>
       <button class="btn filtro activo">Todos los lugares</button>

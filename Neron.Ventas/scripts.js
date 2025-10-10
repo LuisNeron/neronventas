@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // ⚙️ CONFIG
   // =========================
-  const CONFIG = {
-    familias: 10,                 // cuántas familias aleatorias
-    rangoArticulosPorFamilia: [6, 14],
-    tarifa: 1,
-  };
+const CONFIG = {
+  familias: 12,  // antes estaba en 10
+  rangoArticulosPorFamilia: [6, 14],
+  tarifa: 1,
+};
 
   // 🎨 helpers de color (mapeado a clases de tu CSS)
   const COLORS = ["is-yellow","is-cyan","is-green","is-red","is-lilac"];
@@ -54,25 +54,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const pill = el('#clock-pill');
     const tick = () => {
       const d = new Date();
-      pill.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+      pill.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
     };
     tick(); setInterval(tick, 30_000);
   })();
 
   // =========================
-  // 🎲 Generación de datos (random)
-  // =========================
-  const rnd = (min, max) => Math.floor(Math.random()*(max-min+1))+min;
-  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
-  const eur = n => n.toFixed(2).replace('.', ',');
+// 🎲 Generación de datos (random)
+const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+const eur = n => n.toFixed(2).replace('.', ',');
 
-  function genFamilias(){
-    familias = Array.from({length: CONFIG.familias}, (_,i)=>({
-      id: i+1,
-      nombre: BASE_FAMILIAS[i % BASE_FAMILIAS.length] + (i >= BASE_FAMILIAS.length ? ` ${i+1}` : ''),
-      color: pick(COLORS),
-    }));
-  }
+// 🖼️ Imágenes de fondo de las familias
+const urls = [
+  "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", // hamburguesa ✅
+  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // pizza ✅
+  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80", // ensalada ✅
+  "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=600&q=80", // pasta (reemplazo estable) ✅
+  "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=600&q=80", // carne ✅
+  "https://images.unsplash.com/photo-1625938144756-903ba3f7c5f3?auto=format&fit=crop&w=600&q=80", // empanadas (reemplazo estable) ✅
+  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80", // postre ✅
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80", // filete ✅
+  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // pizza repetida ✅
+  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // empanadas repetidas ✅
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80", // carne repetida ✅
+  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80"  // postre repetido ✅
+];
+
+
+
+// ⚙️ Familias aleatorias con imagen cíclica
+function genFamilias() {
+  familias = Array.from({ length: CONFIG.familias }, (_, i) => ({
+    id: (i % urls.length) + 1, // 🔁 Repite imágenes si hay más familias que fotos
+    nombre: BASE_FAMILIAS[i % BASE_FAMILIAS.length] + (i >= BASE_FAMILIAS.length ? ` ${i + 1}` : ''),
+    color: pick(COLORS),
+  }));
+}
 
   function genArticulos(){
     articulos = [];
@@ -108,30 +126,43 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // 🖼 Render
   // =========================
-  function renderFamilias(){
-    $familias.innerHTML = '';
 
-    // Botón TODAS
-    const bAll = document.createElement('button');
-    bAll.className = 'cat';
-    bAll.textContent = 'TODAS';
-    bAll.addEventListener('click', ()=>{ familiaActiva=null; renderArticulos(); marcarFamilia(); });
-    $familias.appendChild(bAll);
+function renderFamilias() {
+  $familias.innerHTML = '';
 
-    familias.forEach(f=>{
-      const b = document.createElement('button');
-      b.className = 'cat';
-      b.textContent = f.nombre.toUpperCase();
-      b.addEventListener('click', ()=>{
-        familiaActiva = f.id;
-        renderArticulos();
-        marcarFamilia(f.id);
-      });
-      $familias.appendChild(b);
+  // Botón TODAS
+  const bAll = document.createElement('button');
+  bAll.className = 'cat';
+  bAll.innerHTML = '<span>TODAS</span>';
+  bAll.addEventListener('click', () => {
+    familiaActiva = null;
+    renderArticulos();
+    marcarFamilia();
+  });
+  $familias.appendChild(bAll);
+
+  familias.forEach(f => {
+    const b = document.createElement('button');
+    b.className = 'cat';
+    b.innerHTML = `<span>${f.nombre.toUpperCase()}</span>`;
+
+    // 🖼️ Asigna imagen de fondo (usa el ID para buscar la imagen)
+    b.style.setProperty('--bg-img', `url('${urls[f.id - 1]}')`);
+
+
+    // Evento al hacer click
+    b.addEventListener('click', () => {
+      familiaActiva = f.id;
+      renderArticulos();
+      marcarFamilia(f.id);
     });
 
-    marcarFamilia();
-  }
+    $familias.appendChild(b);
+  });
+
+  marcarFamilia();
+}
+
 
   function marcarFamilia(id=null){
     [...$familias.children].forEach(btn=>{
@@ -156,6 +187,17 @@ document.addEventListener('DOMContentLoaded', () => {
       .filter(pasaFiltros);
 
     // Título de arriba
+    // Actualizar etiqueta de familia activa a la derecha de "ARTÍCULOS"
+const famLabel = el('#familia-actual');
+if (famLabel) {
+  if (familiaActiva) {
+    const fam = familias.find(f => f.id === familiaActiva);
+    famLabel.textContent = fam ? `– ${fam.nombre.toUpperCase()}` : '';
+  } else {
+    famLabel.textContent = '– TODAS';
+  }
+}
+
     $titulo.textContent = familiaActiva
       ? (familias.find(f=>f.id===familiaActiva)?.nombre || 'MENÚ').toUpperCase()
       : 'MENÚ (TODAS)';

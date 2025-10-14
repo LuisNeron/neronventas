@@ -79,18 +79,18 @@ html,body{
 /* ===========================
    GRID PRINCIPAL (2x2)
    =========================== */
-.shell{
-  display:grid;
-  grid-template-columns:var(--leftcol-w) 1fr;
-  grid-template-rows:1fr 1fr;
+.shell {
+  display: grid;
+  grid-template-columns: var(--leftcol-w) 1fr;
+  grid-template-rows: 1fr 1.2fr; /* 🔄 antes: 1fr 1fr */
   grid-template-areas:
     "ticket controls"
     "familias articulos";
-  gap:var(--gap);
-  flex:1;
-  min-height:0;
-  overflow:hidden;
-  height:100%;
+  gap: var(--gap);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  height: 100%;
 }
 
 /* ===========================
@@ -124,6 +124,12 @@ html,body{
   font-weight:700;
   font-size:13px;
 }
+
+.pill i {
+  margin-right: 6px;
+  opacity: 0.85;
+}
+
 
 /* Tabla del ticket */
 .ticket-grid{
@@ -236,15 +242,18 @@ html,body{
   opacity:.8;
   font-weight:800;
 }
-.categories{
-  display:grid;
-  gap:var(--gap);
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  align-content:start;
-  flex:1;
-  min-height:0;
-  overflow:auto;
+.categories {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(4, 1fr); /* 👈 Fuerza 4 columnas */
+  grid-auto-rows: 1fr;                   /* 👈 Altura automática por fila */
+  align-content: start;
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
 }
+
+
 .cat{
   position:relative;
   display:flex;
@@ -255,7 +264,7 @@ html,body{
   border-radius:var(--radius);
   font-weight:900;
   font-size:1rem;
-  min-height:100px;
+  min-height:90px;
   cursor:pointer;
   overflow:hidden;
   box-shadow:var(--shadow);
@@ -402,3 +411,73 @@ html,body{
 .ticket-grid::-webkit-scrollbar-thumb,
 .products-grid::-webkit-scrollbar-thumb,
 .categories::-webkit-scrollbar-thumb{background:#2f3a44;border-radius:999px}
+
+
+/* ===========================
+MODAL (Artículos Rápidos)   
+   =========================== */
+/* Estilos para el modal general */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Modal más ancho y alto */
+.modal-content {
+  position: relative;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  height: 80%;
+  max-width: 960px;
+  overflow: hidden;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h2 {
+  margin: 0 0 16px;
+  font-size: 1.6em;
+}
+
+/* Botones estilo artículos */
+.grid-articulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  overflow-y: auto;
+  flex-grow: 1;
+  padding-right: 8px;
+}
+
+/* Cierre */
+.iconbtn {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  align-self: flex-end;
+  cursor: pointer;
+}
+.iconbtn:hover {
+  background: #666;
+}

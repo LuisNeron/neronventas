@@ -42,10 +42,12 @@
     <section class="ticket" aria-label="Ticket">
       <div class="ticket-head">
         <div class="title">MOSTRADOR de CAFETERIA</div>
-        <div class="pills">
-          <div class="pill" id="tarifa-pill">Tarifa 1</div>
-          <div class="pill" id="clock-pill">--:--</div>
-        </div>
+<div class="pills">
+  <div class="pill" id="user-pill"><i class="fa-solid fa-user"></i> Usuario 1</div>
+  <div class="pill" id="tarifa-pill">Tarifa 1</div>
+  <div class="pill" id="clock-pill">--:--</div>
+</div>
+
       </div>
 
       <div class="ticket-grid">
@@ -62,13 +64,15 @@
         </table>
       </div>
 
-      <div class="ticket-actions">
-        <div class="big-total" id="ticket-total">0,00</div>
-        <div class="btn-row">
-          <button class="iconbtn" id="btn-aleatorio"><i class="fa-solid fa-shuffle"></i> Randomizar</button>
-          <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button>
-        </div>
-      </div>
+<div class="ticket-actions">
+  <div class="btn-row">
+    <button class="iconbtn" id="btn-rapidos"><i class="fa-solid fa-bolt"></i> Artículos Rápidos</button>
+    <!-- <button class="iconbtn" id="btn-aleatorio"><i class="fa-solid fa-shuffle"></i> Randomizar</button> -->
+    <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button>
+  </div>
+  <div class="big-total" id="ticket-total">0,00</div>
+</div>
+
     </section>
 
     <!-- ===================== -->
@@ -106,6 +110,17 @@
 
   </div>
 </div>
+
+<div id="modal-rapidos" class="modal hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-content">
+    <h2>Artículos Rápidos</h2>
+    <div id="rapidos-list" class="grid-articulos"></div>
+    <button id="cerrar-modal" class="iconbtn">Cerrar</button>
+  </div>
+</div>
+
+
 
 <script src="scripts.js"></script>
 </body>

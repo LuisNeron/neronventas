@@ -298,8 +298,57 @@ if (famLabel) {
     renderTicket();
   }
 
-  el('#btn-aleatorio').addEventListener('click', randomizeAll);
+  // el('#btn-aleatorio').addEventListener('click', randomizeAll);
   el('#btn-vaciar').addEventListener('click', ()=>{ ticket = []; renderTicket(); });
+
+
+    // =========================
+  // 🔁 Artículos Rápidos
+  // =========================
+
+  // 🧲 Botón "Artículos Rápidos"
+el('#btn-rapidos').addEventListener('click', () => {
+  // Selección aleatoria
+  const seleccion = [];
+  const copia = [...articulos];
+
+  while (seleccion.length < 12 && copia.length > 0) {
+    const index = Math.floor(Math.random() * copia.length);
+    seleccion.push(copia.splice(index, 1)[0]);
+  }
+
+  const lista = el('#rapidos-list');
+  lista.innerHTML = '';
+  seleccion.forEach(a => {
+    const b = document.createElement('button');
+    b.className = `prod ${a.color}`;
+    b.innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+        <div style="font-weight:900">${a.nombre.toUpperCase()}</div>
+        <div style="opacity:.85">€ ${eur(a.precio)}</div>
+        ${a.oferta ? '<div class="pill" style="margin-top:4px">OFERTA</div>' : ''}
+      </div>
+    `;
+    b.addEventListener('click', () => {
+      addToTicket(a);
+      closeModal();
+    });
+    lista.appendChild(b);
+  });
+
+  openModal();
+});
+
+
+function openModal() {
+  el('#modal-rapidos').classList.remove('hidden');
+}
+function closeModal() {
+  el('#modal-rapidos').classList.add('hidden');
+}
+
+el('#cerrar-modal').addEventListener('click', closeModal);
+el('#modal-rapidos .modal-backdrop').addEventListener('click', closeModal);
 
   // =========================
   // 🚀 Init

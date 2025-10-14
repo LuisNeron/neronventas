@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -8,120 +9,127 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="1024x768.css">
 </head>
 
 <body>
-<div class="app">
-
-  <!-- ===================== -->
-  <!-- DIV 1: TOOLBAR       -->
-  <!-- ===================== -->
-  <div class="toolbar" aria-label="Barra superior">
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-door-open"></i><span>Salir</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-sliders"></i><span>Opciones</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-square-parking"></i><span>Parking</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Abrir Cajón</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-people-arrows"></i><span>Traspaso</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-bell-concierge"></i><span>Preparación</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-utensils"></i><span>Mesas</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-print"></i><span>Imprime</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-file-invoice-dollar"></i><span>Cerrar Venta</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-money-bill-wave"></i><span>Contado</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-percent"></i><span>Parcial</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-users"></i><span>PAX</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Caja</span></button>
-    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-ellipsis"></i><span>Más</span></button>
-  </div>
-
-  <!-- ====== MAIN GRID (2x2) ====== -->
-  <div class="shell">
+  <div class="app">
 
     <!-- ===================== -->
-    <!-- DIV 2: TICKET        -->
+    <!-- DIV 1: TOOLBAR       -->
     <!-- ===================== -->
-    <section class="ticket" aria-label="Ticket">
-      <div class="ticket-head">
-        <div class="title">MOSTRADOR de CAFETERIA</div>
-<div class="pills">
-  <div class="pill" id="user-pill"><i class="fa-solid fa-user"></i> Usuario 1</div>
-  <div class="pill" id="tarifa-pill">Tarifa 1</div>
-  <div class="pill" id="clock-pill">--:--</div>
-</div>
+    <div class="toolbar" aria-label="Barra superior">
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-door-open"></i><span>Salir</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-sliders"></i><span>Opciones</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-square-parking"></i><span>Parking</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Abrir Cajón</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-people-arrows"></i><span>Traspaso</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-bell-concierge"></i><span>Preparación</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-utensils"></i><span>Mesas</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-print"></i><span>Imprime</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-file-invoice-dollar"></i><span>Cerrar
+          Venta</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-money-bill-wave"></i><span>Contado</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-percent"></i><span>Parcial</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-users"></i><span>PAX</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Caja</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-ellipsis"></i><span>Más</span></button>
+    </div>
 
+    <!-- ====== MAIN GRID (2x2) ====== -->
+    <div class="shell">
+
+      <div class="container-ticket-familias">
+        <!-- ===================== -->
+        <!-- DIV 2: TICKET        -->
+        <!-- ===================== -->
+        <section class="ticket" aria-label="Ticket">
+          <div class="ticket-head">
+            <div class="title">MOSTRADOR de CAFETERIA</div>
+            <div class="pills">
+              <div class="pill" id="user-pill"><i class="fa-solid fa-user"></i> Usuario 1</div>
+              <div class="pill" id="tarifa-pill">Tarifa 1</div>
+              <div class="pill" id="clock-pill">--:--</div>
+            </div>
+          </div>
+        
+          <div class="ticket-grid">
+            <table class="ticket-table">
+              <thead>
+                <tr>
+                  <th style="width:55%">Descripción</th>
+                  <th style="width:10%">Cant</th>
+                  <th style="width:15%">P.Unit</th>
+                  <th style="width:20%">P.V.P</th>
+                </tr>
+              </thead>
+              <tbody id="ticket-body"><!-- JS --></tbody>
+            </table>
+          </div>
+          <div class="ticket-actions">
+            <div class="btn-row">
+              <button class="iconbtn" id="btn-rapidos"><i class="fa-solid fa-bolt"></i> Artículos Rápidos</button>
+              <!-- <button class="iconbtn" id="btn-aleatorio"><i class="fa-solid fa-shuffle"></i> Randomizar</button> -->
+              <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button>
+            </div>
+            <div class="big-total" id="ticket-total">0,00</div>
+          </div>
+        
+        </section>
+        <!-- ===================== -->
+        <!-- DIV 4: FAMILIAS       -->
+        <!-- ===================== -->
+        <section class="familias-panel" aria-label="Familias">
+          <h4 class="familias-title">FAMILIAS</h4>
+          <div class="categories" id="familias"><!-- JS --></div>
+        </section>
+      </div>
+      
+      <div class="container-controls-articulos">
+        <!-- ===================== -->
+        <!-- DIV 3: AJUSTES        -->
+        <!-- ===================== -->
+        <section class="controls" aria-label="Controles y filtros">
+          <div class="controls-row">
+            <div class="title strong" id="titulo-menu">MENÚ (TODAS)</div>
+            <div class="pills">
+              <div class="pill">2</div>
+              <div class="pill">3</div>
+              <div class="pill">4</div>
+              <div class="pill">5</div>
+              <div class="pill">…</div>
+            </div>
+          </div>
+          <div class="controls-row">
+            <input id="inputBuscar" placeholder="Buscar artículo..." class="search-input">
+            <div class="pills" id="filtrosEstado"><!-- JS añadirá filtros --></div>
+          </div>
+        </section>
+        
+        <!-- ===================== -->
+        <!-- DIV 5: ARTÍCULOS      -->
+        <!-- ===================== -->
+        <section class="articles-panel" aria-label="Artículos">
+          <h4 class="familias-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
+          <div class="products-grid" id="articulos"><!-- JS --></div>
+        </section>
       </div>
 
-      <div class="ticket-grid">
-        <table class="ticket-table">
-          <thead>
-            <tr>
-              <th style="width:55%">Descripción</th>
-              <th style="width:10%">Cant</th>
-              <th style="width:15%">P.Unit</th>
-              <th style="width:20%">P.V.P</th>
-            </tr>
-          </thead>
-          <tbody id="ticket-body"><!-- JS --></tbody>
-        </table>
-      </div>
-
-<div class="ticket-actions">
-  <div class="btn-row">
-    <button class="iconbtn" id="btn-rapidos"><i class="fa-solid fa-bolt"></i> Artículos Rápidos</button>
-    <!-- <button class="iconbtn" id="btn-aleatorio"><i class="fa-solid fa-shuffle"></i> Randomizar</button> -->
-    <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button>
+    </div>
   </div>
-  <div class="big-total" id="ticket-total">0,00</div>
-</div>
 
-    </section>
-
-    <!-- ===================== -->
-    <!-- DIV 3: AJUSTES        -->
-    <!-- ===================== -->
-    <section class="controls" aria-label="Controles y filtros">
-      <div class="controls-row">
-        <div class="title strong" id="titulo-menu">MENÚ (TODAS)</div>
-        <div class="pills">
-          <div class="pill">2</div><div class="pill">3</div><div class="pill">4</div><div class="pill">5</div><div class="pill">…</div>
-        </div>
-      </div>
-
-      <div class="controls-row">
-        <input id="inputBuscar" placeholder="Buscar artículo..." class="search-input">
-        <div class="pills" id="filtrosEstado"><!-- JS añadirá filtros --></div>
-      </div>
-    </section>
-
-    <!-- ===================== -->
-    <!-- DIV 4: FAMILIAS       -->
-    <!-- ===================== -->
-    <section class="familias-panel" aria-label="Familias">
-      <h4 class="familias-title">FAMILIAS</h4>
-      <div class="categories" id="familias"><!-- JS --></div>
-    </section>
-
-    <!-- ===================== -->
-    <!-- DIV 5: ARTÍCULOS      -->
-    <!-- ===================== -->
-    <section class="articles-panel" aria-label="Artículos">
-      <h4 class="familias-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
-      <div class="products-grid" id="articulos"><!-- JS --></div>
-    </section>
-
+  <div id="modal-rapidos" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <h2>Artículos Rápidos</h2>
+      <div id="rapidos-list" class="grid-articulos"></div>
+      <button id="cerrar-modal" class="iconbtn">Cerrar</button>
+    </div>
   </div>
-</div>
-
-<div id="modal-rapidos" class="modal hidden">
-  <div class="modal-backdrop"></div>
-  <div class="modal-content">
-    <h2>Artículos Rápidos</h2>
-    <div id="rapidos-list" class="grid-articulos"></div>
-    <button id="cerrar-modal" class="iconbtn">Cerrar</button>
-  </div>
-</div>
 
 
 
-<script src="scripts.js"></script>
+  <script src="scripts.js"></script>
 </body>
+
 </html>

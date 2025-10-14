@@ -81,8 +81,8 @@ html,body{
    =========================== */
 .shell {
   display: grid;
-  grid-template-columns: var(--leftcol-w) 1fr;
-  grid-template-rows: 1fr 1.2fr; /* 🔄 antes: 1fr 1fr */
+  grid-template-columns: 1fr 1.4fr;   /* dos mitades horizontales */
+  grid-template-rows: 1.2fr 1.2fr;  /* superior 40%, inferior 60% */
   grid-template-areas:
     "ticket controls"
     "familias articulos";
@@ -91,6 +91,7 @@ html,body{
   min-height: 0;
   overflow: hidden;
   height: 100%;
+  background-color: var(--ok);
 }
 
 /* ===========================
@@ -107,6 +108,7 @@ html,body{
   padding:12px;
   min-height:0;
   overflow:hidden;
+  height: 20vw;
 }
 .ticket-head{
   display:flex;
@@ -202,6 +204,8 @@ html,body{
   background:transparent;
   min-height:0;
   overflow:hidden;
+  background-color: rgb(35, 255, 237);
+  height: 30vh;
 }
 .controls .controls-row{
   display:flex;
@@ -218,6 +222,15 @@ html,body{
   outline:none;
   color:#e7e7e7;
   min-width:220px;
+}
+
+.container-ticket-familias {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* ===========================
@@ -244,8 +257,8 @@ html,body{
 }
 .categories {
   display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(4, 1fr); /* 👈 Fuerza 4 columnas */
+  gap: 8px; /* antes var(--gap) */
+  grid-template-columns: repeat(5, 1fr); /* 👈 Fuerza 4 columnas */
   grid-auto-rows: 1fr;                   /* 👈 Altura automática por fila */
   align-content: start;
   flex: 1;
@@ -263,8 +276,8 @@ html,body{
   color:#fff;
   border-radius:var(--radius);
   font-weight:900;
-  font-size:1rem;
-  min-height:90px;
+  min-height: 70px; /* antes 90px */
+  font-size: 0.85rem; /* más compacto */
   cursor:pointer;
   overflow:hidden;
   box-shadow:var(--shadow);
@@ -314,6 +327,7 @@ html,body{
   padding:12px;
   min-height:0;
   overflow:hidden;
+  height: 30vw;
 }
 
 /* 🔸 Añade este bloque aquí */
@@ -329,8 +343,8 @@ html,body{
 /* Luego sigue el resto */
 .products-grid{
   display:grid;
-  gap:var(--gap);
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap: 8px; /* más juntas */
+  grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); /* más artículos por fila */
   align-content:start;
   flex:1;
   min-height:0;
@@ -346,12 +360,13 @@ html,body{
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 16px 12px;
+  padding: 10px 8px;
+  font-size: 0.85rem;
   border-radius: var(--radius);
   border: 1px solid rgba(255,255,255,.07);
   background: #1c2329; /* base neutro oscuro */
   font-weight: 800;
-  height: 130px; /* 🔹 altura fija uniforme */
+  height: 90px; /* 🔹 altura fija uniforme */
   box-shadow: var(--shadow);
   cursor: pointer;
   overflow: hidden;
@@ -480,4 +495,11 @@ MODAL (Artículos Rápidos)
 }
 .iconbtn:hover {
   background: #666;
+}
+
+
+.container-controls-articulos {
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
 }

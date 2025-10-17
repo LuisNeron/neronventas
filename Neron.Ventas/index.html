@@ -16,7 +16,7 @@
   <div class="app">
 
     <!-- ===================== -->
-    <!-- DIV 1: TOOLBAR       -->
+    <!-- DIV 1: TOOLBAR (FULL WIDTH, SIN SCROLL) -->
     <!-- ===================== -->
     <div class="toolbar" aria-label="Barra superior">
       <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-door-open"></i><span>Salir</span></button>
@@ -27,21 +27,15 @@
       <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-bell-concierge"></i><span>Preparación</span></button>
       <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-utensils"></i><span>Mesas</span></button>
       <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-print"></i><span>Imprime</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-file-invoice-dollar"></i><span>Cerrar
-          Venta</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-money-bill-wave"></i><span>Contado</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-percent"></i><span>Parcial</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-users"></i><span>PAX</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Caja</span></button>
-      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-ellipsis"></i><span>Más</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-print"></i><span>Imprime</span></button>
+      <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-print"></i><span>Imprime</span></button>
     </div>
 
     <!-- ====== MAIN GRID (2x2) ====== -->
     <div class="shell">
-
       <div class="container-ticket-familias">
         <!-- ===================== -->
-        <!-- DIV 2: TICKET        -->
+        <!-- DIV 2: TICKET -->
         <!-- ===================== -->
         <section class="ticket" aria-label="Ticket">
           <div class="ticket-head">
@@ -52,7 +46,7 @@
               <div class="pill" id="clock-pill">--:--</div>
             </div>
           </div>
-        
+
           <div class="ticket-grid">
             <table class="ticket-table">
               <thead>
@@ -66,58 +60,80 @@
               <tbody id="ticket-body"><!-- JS --></tbody>
             </table>
           </div>
+
           <div class="ticket-actions">
             <div class="btn-row">
-              <button class="iconbtn" id="btn-rapidos"><i class="fa-solid fa-bolt"></i> Artículos Rápidos</button>
-              <!-- <button class="iconbtn" id="btn-aleatorio"><i class="fa-solid fa-shuffle"></i> Randomizar</button> -->
-              <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button>
+
+              <!-- <button class="iconbtn" id="btn-rapidos"><i class="fa-solid fa-bolt"></i> Artículos Rápidos</button>
+              <button class="iconbtn" id="btn-vaciar"><i class="fa-solid fa-trash"></i> Vaciar ticket</button> -->
+
+              <!-- dentro de .ticket-actions .btn-row -->
+              <button class="sysbtn sysbtn--mini sysbtn--accent" id="btn-rapidos">
+                <i class="fa-solid fa-bolt"></i><span>Artículos Rápidos</span>
+              </button>
+
+              <!-- <button class="sysbtn sysbtn--mini sysbtn--accent" id="btn-vaciar">
+                <i class="fa-solid fa-trash"></i><span>Vaciar ticket</span>
+              </button> -->
+
+
+
             </div>
             <div class="big-total" id="ticket-total">0,00</div>
           </div>
-        
         </section>
+
         <!-- ===================== -->
-        <!-- DIV 4: FAMILIAS       -->
+        <!-- DIV 4: FAMILIAS -->
         <!-- ===================== -->
         <section class="familias-panel" aria-label="Familias">
           <h4 class="familias-title">FAMILIAS</h4>
           <div class="categories" id="familias"><!-- JS --></div>
         </section>
       </div>
-      
+
       <div class="container-controls-articulos">
         <!-- ===================== -->
-        <!-- DIV 3: AJUSTES        -->
+        <!-- DIV 3: CONTROLS (IZQ + DER PARA EXTRAS) -->
         <!-- ===================== -->
         <section class="controls" aria-label="Controles y filtros">
-          <div class="controls-row">
-            <div class="title strong" id="titulo-menu">MENÚ (TODAS)</div>
-            <div class="pills">
-              <div class="pill">2</div>
-              <div class="pill">3</div>
-              <div class="pill">4</div>
-              <div class="pill">5</div>
-              <div class="pill">…</div>
+          <div class="controls-left">
+            <!-- LADO IZQUIERDO (título, búsqueda, filtros) -->
+            <div class="controls-row">
+              <input id="inputBuscar" placeholder="Buscar artículo..." class="search-input">
             </div>
           </div>
-          <div class="controls-row">
-            <input id="inputBuscar" placeholder="Buscar artículo..." class="search-input">
-            <div class="pills" id="filtrosEstado"><!-- JS añadirá filtros --></div>
-          </div>
+<!-- LADO DERECHO (botones) -->
+<div class="controls-right">
+  <div class="control-right-up">
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-file-invoice-dollar"></i><span>Cerrar</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-money-bill-wave"></i><span>Contado</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-percent"></i><span>Parcial</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-users"></i><span>PAX</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-cash-register"></i><span>Caja</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-receipt"></i><span>Ticket</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-qrcode"></i><span>QR</span></button>
+    <button class="sysbtn sysbtn--accent"><i class="fa-solid fa-ellipsis"></i><span>Más</span></button>
+  </div>
+
+<div class="control-right-down">
+  <div id="reloj-bottom" class="bottom-clock" aria-live="polite"></div>
+</div>
+</div>
         </section>
-        
+
         <!-- ===================== -->
-        <!-- DIV 5: ARTÍCULOS      -->
+        <!-- DIV 5: ARTÍCULOS -->
         <!-- ===================== -->
         <section class="articles-panel" aria-label="Artículos">
           <h4 class="familias-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
           <div class="products-grid" id="articulos"><!-- JS --></div>
         </section>
       </div>
-
     </div>
   </div>
 
+  <!-- MODAL RÁPIDOS -->
   <div id="modal-rapidos" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content">
@@ -126,8 +142,6 @@
       <button id="cerrar-modal" class="iconbtn">Cerrar</button>
     </div>
   </div>
-
-
 
   <script src="scripts.js"></script>
 </body>

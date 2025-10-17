@@ -26,7 +26,7 @@
 html,body{
   height:100%;
   margin:0;
-  background:var(--bg);
+  background: var(--bg);
   color:var(--ink);
   font:15px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell;
   overflow:hidden;
@@ -37,23 +37,24 @@ html,body{
   flex-direction:column;
   gap:var(--gap);
   height:100vh;
-  padding:clamp(8px,1.2vw,18px);
+  /* padding: 5px 10px 10px 10px; */
 }
 
 /* ===========================
-   TOOLBAR (una sola fila)
+   TOOLBAR (full width, sin scroll)
    =========================== */
-.toolbar {
-  display:flex;
-  flex-wrap:nowrap;
-  overflow-x:auto;
-  gap:var(--gap);
-  padding-bottom:2px;
-  scrollbar-width:thin;
+.toolbar{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--gap);
+  align-items: stretch;
+  width:100%;
+  overflow:hidden;             /* no barras */
+  padding-right: 10px;
+  padding-left: 10px;
 }
 .sysbtn{
-  flex:0 0 auto;
-  width:110px;
+  width:auto;                  /* la celda manda */
   min-height:74px;
   display:flex;
   flex-direction:column;
@@ -73,42 +74,33 @@ html,body{
 .sysbtn:hover{filter:brightness(1.05)}
 .sysbtn:active{transform:translateY(1px)}
 .sysbtn--accent{background:var(--accent);color:var(--accent-ink)}
-.toolbar::-webkit-scrollbar{height:8px}
-.toolbar::-webkit-scrollbar-thumb{background:#2f3a44;border-radius:999px}
+/* versión compacta para EXTRAS a la derecha */
+.sysbtn--mini{min-height:64px;gap:6px}
 
 /* ===========================
    GRID PRINCIPAL (2x2)
    =========================== */
-.shell {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;   /* dos mitades horizontales */
-  grid-template-rows: 1.2fr 1.2fr;  /* superior 40%, inferior 60% */
-  grid-template-areas:
-    "ticket controls"
-    "familias articulos";
-  gap: var(--gap);
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  height: 100%;
-  background-color: var(--ok);
+.shell{
+  display:flex;
+  gap:var(--gap);
+  flex:1;
+  width:100%;
+  height:100%;
+  overflow:hidden;
 }
-
 /* ===========================
    DIV 2: TICKET
    =========================== */
 .ticket{
-  grid-area:ticket;
   display:flex;
   flex-direction:column;
-  gap:var(--gap);
   background:var(--panel);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:12px;
-  min-height:0;
+  height: 45vh;               /* altura fija */
   overflow:hidden;
-  height: 20vw;
+  gap:10px;
 }
 .ticket-head{
   display:flex;
@@ -122,52 +114,55 @@ html,body{
   background:#2c343b;
   border:1px solid rgba(255,255,255,.07);
   padding:8px 12px;
-  border-radius:999px;
+  border-radius:10px;
   font-weight:700;
   font-size:13px;
 }
+.pill i{margin-right:6px;opacity:.85}
 
-.pill i {
-  margin-right: 6px;
-  opacity: 0.85;
-}
-
-
-/* Tabla del ticket */
+/* Tabla del ticket — fondo blanco/gris SIEMPRE */
 .ticket-grid{
   flex:1 1 auto;
   min-height:0;
-  background:var(--panel-2);
-  border:1px solid rgba(255,255,255,.06);
+  /* zebra permanente, incluso con 0 filas */
+  background: #f5f7fa;
+  border:1px solid rgba(0,0,0,.18);
   border-radius:10px;
   overflow:auto;
 }
+
 .ticket-table{
   width:100%;
   border-collapse:collapse;
   table-layout:fixed;
 }
+
+/* Cabecera oscura como antes */
 .ticket-table thead th{
-  position:sticky;
-  top:0;
-  z-index:1;
-  background:#1a1f23;
-  color:#d7dee6;
-  text-align:left;
-  font-size:12px;
-  font-weight:700;
+  position:sticky; top:0; z-index:1;
+  background:#1a1f23; color:#fff;
+  text-align:left; font-size:12px; font-weight:700;
   padding:10px 12px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
-.ticket-table tbody td{
-  padding:8px 10px;
-  border-bottom:1px dashed rgba(255,255,255,.07);
-  color:#dfe5ec;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  border-bottom:1px solid rgba(255,255,255,.12);
 }
 
+/* Celdas: sin fondo propio, líneas finas y texto oscuro */
+.ticket-table tbody td{
+  background: transparent;                  /* ← importante */
+  padding:8px 10px;
+  color:#111;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.ticket-table tbody tr:nth-child(odd){  background:#ffffff; }
+.ticket-table tbody tr:nth-child(even){ background:#f5f7fa; }
+
+/* Separadores verticales */
+/* (opcional) separadores verticales */
+.ticket-table thead th+th,
+.ticket-table tbody td+td{
+  border-left:1px solid rgba(0,0,0,.08);
+}
 /* Pie del ticket */
 .ticket-actions{
   display:flex;
@@ -193,60 +188,106 @@ html,body{
 .iconbtn:hover{filter:brightness(1.08)}
 .iconbtn:active{transform:translateY(1px)}
 
-/* ===========================
-   DIV 3: CONTROLS
-   =========================== */
-.controls{
-  grid-area:controls;
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap);
-  background:transparent;
-  min-height:0;
-  overflow:hidden;
-  background-color: rgb(35, 255, 237);
-  height: 30vh;
-}
-.controls .controls-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.strong{font-weight:900;letter-spacing:.3px}
-.search-input{
-  background:#2c343b;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;
-  padding:8px 12px;
-  outline:none;
-  color:#e7e7e7;
-  min-width:220px;
+/* Scrollbar del grid del ticket en claro */
+.ticket-grid::-webkit-scrollbar-thumb{
+  background:#c7ccd1;
+  border-radius:999px;
 }
 
-.container-ticket-familias {
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap);
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
+/* ===========================
+   DIV 3: CONTROLS (izq + der)
+   =========================== */
+
+.controls {
+  display:flex;
+  gap:var(--gap);
+  height:20vh;
+  width: 100%;
+  /* background-color: turquoise; */
+}
+
+.controls-left {
+  display:flex;
+  gap:var(--gap);
+  height:100px;
+  width:40vw;
   height: 100%;
+  background-color: purple;
+}
+
+.controls-right {
+  display:flex;
+  flex-direction: column;
+  gap:var(--gap);
+  height:100px;
+  width:60vw;
+  height: 100%;
+  /* background-color: orange; */
+}
+
+/* contenedor derecho: arriba = grid de 4x2 */
+.control-right-up{
+  /* background-color: yellow;   tu color de debug */
+  width: 100%;
+  height: 80%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);  /* 4 columnas */
+  grid-template-rows: repeat(2, 1fr);     /* 2 filas */
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+/* que cada botón rellene su celda y tenga altura uniforme */
+.control-right-up .sysbtn{
+  height: 100%;
+  min-height: unset;           /* anula el min-height de .sysbtn */
+}
+
+/* si los quieres más compactos aquí dentro */
+.control-right-up .sysbtn span{ font-size:12px; }
+.control-right-up .sysbtn i{ font-size:22px; }
+
+.control-right-down{
+  /* background-color: pink; quítalo si ya no quieres el color debug */
+  width: 100%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* pegado a la derecha */
+  padding: 0 var(--gap);
+}
+
+.bottom-clock{
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: .5px;
+  opacity: .95;
+}
+
+
+/* ===========================
+   COLUMNA IZQUIERDA (ticket+familias)
+   =========================== */
+.container-ticket-familias{
+  display:flex;
+  flex-direction:column;
+  width:600px;                 /* ancho fijo */
+  flex:0 0 600px;
+  gap:var(--gap);
+  height:100%;
+  overflow:hidden;
 }
 
 /* ===========================
    DIV 4: FAMILIAS (con imagen)
    =========================== */
 .familias-panel{
-  grid-area:familias;
+  flex:1;
   display:flex;
   flex-direction:column;
-  gap:8px;
   background:var(--panel);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:12px;
-  min-height:0;
   overflow:hidden;
 }
 .familias-title{
@@ -255,19 +296,19 @@ html,body{
   letter-spacing:.4px;
   opacity:.8;
   font-weight:800;
+  display:flex;
+  justify-content:center;
+  padding:10px 0;
 }
-.categories {
-  display: grid;
-  gap: 8px; /* antes var(--gap) */
-  grid-template-columns: repeat(5, 1fr); /* 👈 Fuerza 4 columnas */
-  grid-auto-rows: 1fr;                   /* 👈 Altura automática por fila */
-  align-content: start;
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
+.categories{
+  display:grid;
+  gap:8px;
+  grid-template-columns:repeat(5, 1fr);
+  align-content:start;
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
 }
-
-
 .cat{
   position:relative;
   display:flex;
@@ -277,8 +318,8 @@ html,body{
   color:#fff;
   border-radius:var(--radius);
   font-weight:900;
-  min-height: 70px; /* antes 90px */
-  font-size: 0.85rem; /* más compacto */
+  min-height:70px;            /* antes 90px */
+  font-size:.85rem;           /* más compacto */
   cursor:pointer;
   overflow:hidden;
   box-shadow:var(--shadow);
@@ -288,135 +329,102 @@ html,body{
 }
 .cat::before{
   content:"";
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
   background-image:var(--bg-img);
-  background-size:cover;
-  background-position:center;
+  background-size:cover; background-position:center;
   filter:brightness(0.55);
   transition:filter var(--trans);
 }
 .cat::after{
   content:"";
-  position:absolute;
-  inset:0;
+  position:absolute; inset:0;
   background:rgba(0,0,0,0.15);
   transition:background var(--trans);
 }
-.cat span{
-  position:relative;
-  z-index:2;
-  padding:0 8px;
-  text-shadow:0 2px 4px rgba(0,0,0,0.6);
-}
+.cat span{position:relative; z-index:2; padding:0 8px; text-shadow:0 2px 4px rgba(0,0,0,0.6)}
 .cat:hover::before{filter:brightness(0.75)}
 .cat:hover::after{background:rgba(0,0,0,0.25)}
 .cat:active{transform:translateY(1px)}
-.cat.active{outline:2px solid var(--accent);filter:brightness(1.15)}
+.cat.active{outline:2px solid var(--accent); filter:brightness(1.15)}
 
 /* ===========================
-   DIV 5: ARTÍCULOS (actualizado)
+   DIV 5: ARTÍCULOS
    =========================== */
 .articles-panel{
-  grid-area:articulos;
+  flex:1;
   display:flex;
   flex-direction:column;
-  gap:8px;
   background:var(--panel);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:12px;
-  min-height:0;
   overflow:hidden;
-  height: 30vw;
 }
-
-/* 🔸 Añade este bloque aquí */
-.familia-actual {
+.familia-actual{
   font-weight:800;
-  font-size:0.9rem;
+  font-size:.9rem;
   margin-left:10px;
   color:var(--accent);
-  opacity:0.9;
+  opacity:.9;
   text-transform:uppercase;
 }
-
-/* Luego sigue el resto */
 .products-grid{
   display:grid;
-  gap: 8px; /* más juntas */
-  grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); /* más artículos por fila */
+  gap:8px;
+  grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
   align-content:start;
   flex:1;
-  min-height:0;
-  overflow:auto;
-  padding-right:6px;
+  overflow-y:auto;
+  padding:10px;
 }
-
-
-.prod {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 10px 8px;
-  font-size: 0.85rem;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,.07);
-  background: #1c2329; /* base neutro oscuro */
-  font-weight: 800;
-  height: 90px; /* 🔹 altura fija uniforme */
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform var(--trans), filter var(--trans);
-  flex: 0 0 auto; /* evita estirarse por contenido */
+.prod{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px 8px;
+  font-size:.85rem;
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.07);
+  background:#1c2329;         /* base neutro oscuro */
+  font-weight:800;
+  height:90px;                 /* altura fija uniforme */
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform var(--trans), filter var(--trans);
+  flex:0 0 auto;               /* evita estirarse por contenido */
 }
-
-.prod > div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  text-align: center;
+.prod > div{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  text-align:center;
 }
-
-.prod:hover::before { filter: brightness(1.1); }
-.prod:active { transform: translateY(1px); }
-
-
-/* capa del color del producto */
 .prod::before{
   content:"";
-  position:absolute;
-  inset:0;
-  opacity:0.9;
+  position:absolute; inset:0;
+  opacity:.9;
   background:var(--prod-color,#20303a);
   z-index:0;
   border-radius:inherit;
   transition:filter var(--trans);
 }
-
-/* texto encima */
-.prod > *{
-  position:relative;
-  z-index:2;
-}
-
+.prod > *{position:relative; z-index:2}
 .prod:hover::before{filter:brightness(1.1)}
 .prod:active{transform:translateY(1px)}
 
 /* ===========================
-   COLORES DE PRODUCTOS (actualizado)
+   COLORES DE PRODUCTOS
    =========================== */
-.is-yellow { --prod-color: #ffe16a; color:#222; }
-.is-cyan   { --prod-color: #7cf1ff; color:#0b2230; }
-.is-green  { --prod-color: #74f7a1; color:#0e2216; }
-.is-red    { --prod-color: #ff5b5b; color:#1a0e0e; }
-.is-lilac  { --prod-color: #e5a6ff; color:#220d2a; }
+.is-yellow{ --prod-color:#ffe16a; color:#222; }
+.is-cyan  { --prod-color:#7cf1ff; color:#0b2230; }
+.is-green { --prod-color:#74f7a1; color:#0e2216; }
+.is-red   { --prod-color:#ff5b5b; color:#1a0e0e; }
+.is-lilac { --prod-color:#e5a6ff; color:#220d2a; }
 
 /* ===========================
    SCROLLBARS
@@ -428,79 +436,113 @@ html,body{
 .products-grid::-webkit-scrollbar-thumb,
 .categories::-webkit-scrollbar-thumb{background:#2f3a44;border-radius:999px}
 
+/* ===========================
+   MODAL (Artículos Rápidos)
+   =========================== */
+.modal{
+  position:fixed; inset:0; z-index:1000;
+  display:flex; justify-content:center; align-items:center;
+}
+.modal.hidden{display:none}
+.modal-backdrop{
+  position:absolute; inset:0; background:rgba(0,0,0,.6);
+}
+.modal-content{
+  position:relative; z-index:1;
+  background:#1a1a1a; color:#fff;
+  padding:20px; border-radius:8px;
+  width:90%; height:80%; max-width:960px;
+  overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.modal-content h2{margin:0 0 16px; font-size:1.6em}
+.grid-articulos{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
+  gap:12px; overflow-y:auto; flex-grow:1; padding-right:8px;
+}
+/* que no pise los demás botones */
+.modal .iconbtn{
+  margin-top:14px;
+  padding:10px 14px;
+  background:#444;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  align-self:flex-end;
+  cursor:pointer;
+}
+.modal .iconbtn:hover{background:#666}
 
 /* ===========================
-MODAL (Artículos Rápidos)   
+   CONTENEDOR DERECHA (controls+artículos)
    =========================== */
-/* Estilos para el modal general */
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.container-controls-articulos{
+  display:flex;
+  flex-direction:column;
+  flex:1;
+  gap:var(--gap);
+  height:100%;
+  overflow:hidden;
 }
 
-.modal.hidden {
-  display: none;
+/* ===========================
+   BOTONES MINI (en ticket)
+   =========================== */
+
+.ticket .sysbtn.sysbtn--mini{
+  flex-direction: row;
+  min-height: 56px;
+  gap: 10px;
+  padding: 10px 16px;
 }
 
-.modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+/* ——— Efecto de alta de línea en el ticket ——— */
+@keyframes ticketFlash {
+  0%   { box-shadow: inset 0 0 0 9999px rgba(211,179,107,.28); } /* velo dorado MUY suave */
+  100% { box-shadow: inset 0 0 0 9999px rgba(211,179,107,0); }
+}
+.ticket-table tbody tr.row-flash {
+  animation: ticketFlash 900ms ease-out;
 }
 
-/* Modal más ancho y alto */
-.modal-content {
-  position: relative;
-  background: #1a1a1a;
-  color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  height: 80%;
-  max-width: 960px;
-  overflow: hidden;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
+/* ——— Mini “pop” del total ——— */
+@keyframes totalPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+.big-total.bump {
+  animation: totalPop 220ms ease-out;
 }
 
-.modal-content h2 {
-  margin: 0 0 16px;
-  font-size: 1.6em;
+/* ===========================
+   ETIQUETA DE PRECIO EN PRODUCTOS
+   =========================== */
+/* --- Precio arriba a la derecha en cada producto --- */
+.prod { position: relative; }
+
+.prod .price-tag{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 2px 8px;
+    border-radius: 0px;
+    font-weight: 900;
+    font-size: .82rem;
+    line-height: 1;
+    background: rgb(0 0 0 / 57%);
+    color: #ffffff;
+    /* border: 1px solid rgba(0, 0, 0, .12); */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+    pointer-events: none;
+    Z-INDEX: 10;
 }
 
-/* Botones estilo artículos */
-.grid-articulos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
-  overflow-y: auto;
-  flex-grow: 1;
-  padding-right: 8px;
-}
-
-/* Cierre */
-.iconbtn {
-  margin-top: 14px;
-  padding: 10px 14px;
-  background: #444;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  align-self: flex-end;
-  cursor: pointer;
-}
-.iconbtn:hover {
-  background: #666;
+/* (opcional) versión compacta si el botón es pequeño */
+.prod--compact .price-tag{
+  padding: 2px 6px;
+  font-size: .78rem;
 }
 
 
-.container-controls-articulos {
-  display: flex;
-  flex-direction: column;
-  gap: 5vh;
-}

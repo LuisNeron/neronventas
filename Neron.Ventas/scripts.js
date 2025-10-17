@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================
   // ⚙️ CONFIG
   // =========================
-const CONFIG = {
-  familias: 12,  // antes estaba en 10
-  rangoArticulosPorFamilia: [6, 14],
-  tarifa: 1,
-};
+  const CONFIG = {
+    familias: 30,
+    rangoArticulosPorFamilia: [6, 14],
+    tarifa: 1,
+  };
 
   // 🎨 helpers de color (mapeado a clases de tu CSS)
   const COLORS = ["is-yellow","is-cyan","is-green","is-red","is-lilac"];
@@ -23,13 +23,11 @@ const CONFIG = {
   // 🔗 DOM refs
   // =========================
   const el = s => document.querySelector(s);
-  const $familias = el('#familias');
-  const $articulos = el('#articulos');
-  const $ticketBody = el('#ticket-body');
-  const $total = el('#ticket-total');
-  const $titulo = el('#titulo-menu');
+  const $familias    = el('#familias');
+  const $articulos   = el('#articulos');
+  const $ticketBody  = el('#ticket-body');
+  const $total       = el('#ticket-total');
   const $inputBuscar = el('#inputBuscar');
-  const $filtrosEstado = el('#filtrosEstado');
 
   // =========================
   // 🧠 Estado
@@ -38,59 +36,65 @@ const CONFIG = {
   let articulos = [];  // [{id, familiaId, nombre, precio, color}]
   let familiaActiva = null;
   let ticket = [];     // [{nombre, punit, cantidad}]
-
-  // Filtros demo (como tu ejemplo de mesas)
-  const filtros = {
-    // si algún día tu artículo tiene flags (vegano/oferta/etc), los enchufas aquí
-    oferta: false,
-    caro: false, // > 10€
-  };
+  let lastAddedKey = null; 
 
   // =========================
   // ⏰ Reloj + Tarifa
   // =========================
-  el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
-  (function startClock(){
-    const pill = el('#clock-pill');
-    const tick = () => {
-      const d = new Date();
-      pill.textContent = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
-    };
-    tick(); setInterval(tick, 30_000);
-  })();
+  //(dd/mm/yyyy HH:MM:SS)
+el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
+
+(function startBottomClock(){
+  // Quita el reloj antiguo del ticket si existe
+  const old = document.querySelector('#clock-pill');
+  if (old && old.parentElement) old.parentElement.removeChild(old);
+
+  const $bottomClock = document.querySelector('#reloj-bottom');
+  const pad = n => String(n).padStart(2,'0');
+
+  const tick = () => {
+    const d = new Date();
+    // const fecha = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+    const hora  = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    if ($bottomClock) $bottomClock.textContent = `${hora}`;
+  };
+
+  tick();                 // pinta ya
+  setInterval(tick, 1000); // y cada segundo
+})();
+
 
   // =========================
-// 🎲 Generación de datos (random)
-const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-const eur = n => n.toFixed(2).replace('.', ',');
+  // Utils y datos dummy
+  // =========================
+  const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const eur = n => n.toFixed(2).replace('.', ',');
 
-// 🖼️ Imágenes de fondo de las familias
-const urls = [
-  "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80", // hamburguesa ✅
-  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // pizza ✅
-  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80", // ensalada ✅
-  "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=600&q=80", // pasta (reemplazo estable) ✅
-  "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=600&q=80", // carne ✅
-  "https://images.unsplash.com/photo-1625938144756-903ba3f7c5f3?auto=format&fit=crop&w=600&q=80", // empanadas (reemplazo estable) ✅
-  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80", // postre ✅
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80", // filete ✅
-  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // pizza repetida ✅
-  "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80", // empanadas repetidas ✅
-  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80", // carne repetida ✅
-  "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80"  // postre repetido ✅
-];
+  // 🖼️ Imágenes de fondo de las familias
+  const urls = [
+    "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1625938144756-903ba3f7c5f3?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80",
+    "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80"
+  ];
 
-
-
-// ⚙️ Familias aleatorias con imagen cíclica
-function genFamilias() {
-  familias = Array.from({ length: CONFIG.familias }, (_, i) => ({
-    id: (i % urls.length) + 1, // 🔁 Repite imágenes si hay más familias que fotos
-    nombre: BASE_FAMILIAS[i % BASE_FAMILIAS.length] + (i >= BASE_FAMILIAS.length ? ` ${i + 1}` : ''),
-    color: pick(COLORS),
-  }));
-}
+  // ⚙️ Familias aleatorias con imagen cíclica
+  function genFamilias() {
+    familias = Array.from({ length: CONFIG.familias }, (_, i) => ({
+      id: (i % urls.length) + 1,
+      nombre: BASE_FAMILIAS[i % BASE_FAMILIAS.length] + (i >= BASE_FAMILIAS.length ? ` ${i + 1}` : ''),
+      color: pick(COLORS),
+    }));
+  }
 
   function genArticulos(){
     articulos = [];
@@ -102,15 +106,14 @@ function genFamilias() {
           familiaId: f.id,
           nombre: `${pick(BASE_A)} ${pick(BASE_B)}`,
           precio: +(Math.random()*18 + 1.2),  // 1.20 - 19.20
-          color: pick(COLORS),
-          oferta: Math.random() < 0.18       // ~18% están en "oferta"
+          color: pick(COLORS)
         });
       }
     });
   }
 
   // =========================
-  // 🧪 Filtros (búsqueda/estado)
+  // 🔎 Búsqueda (sin filtros extra)
   // =========================
   function pasaBusqueda(a){
     const t = ($inputBuscar.value || '').trim().toLowerCase();
@@ -118,51 +121,54 @@ function genFamilias() {
     return a.nombre.toLowerCase().includes(t);
   }
   function pasaFiltros(a){
-    if (filtros.caro && a.precio <= 10) return false;
-    if (filtros.oferta && !a.oferta) return false;
+    // No hay filtros (>10€, oferta). Todo pasa.
     return true;
+  }
+
+  // =========================
+  // 🧩 HTML de cada producto (precio arriba-derecha)
+  // =========================
+  function renderProductoHTML(a){
+    return `
+      <div class="price-tag"> ${eur(a.precio)}</div>
+      <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
+        <div style="font-weight:900">${a.nombre.toUpperCase()}</div>
+      </div>
+    `;
   }
 
   // =========================
   // 🖼 Render
   // =========================
+  function renderFamilias() {
+    $familias.innerHTML = '';
 
-function renderFamilias() {
-  $familias.innerHTML = '';
-
-  // Botón TODAS
-  const bAll = document.createElement('button');
-  bAll.className = 'cat';
-  bAll.innerHTML = '<span>TODAS</span>';
-  bAll.addEventListener('click', () => {
-    familiaActiva = null;
-    renderArticulos();
-    marcarFamilia();
-  });
-  $familias.appendChild(bAll);
-
-  familias.forEach(f => {
-    const b = document.createElement('button');
-    b.className = 'cat';
-    b.innerHTML = `<span>${f.nombre.toUpperCase()}</span>`;
-
-    // 🖼️ Asigna imagen de fondo (usa el ID para buscar la imagen)
-    b.style.setProperty('--bg-img', `url('${urls[f.id - 1]}')`);
-
-
-    // Evento al hacer click
-    b.addEventListener('click', () => {
-      familiaActiva = f.id;
+    // Botón TODAS
+    const bAll = document.createElement('button');
+    bAll.className = 'cat';
+    bAll.innerHTML = '<span>TODAS</span>';
+    bAll.addEventListener('click', () => {
+      familiaActiva = null;
       renderArticulos();
-      marcarFamilia(f.id);
+      marcarFamilia();
+    });
+    $familias.appendChild(bAll);
+
+    familias.forEach(f => {
+      const b = document.createElement('button');
+      b.className = 'cat';
+      b.innerHTML = `<span>${f.nombre.toUpperCase()}</span>`;
+      b.style.setProperty('--bg-img', `url('${urls[f.id - 1]}')`);
+      b.addEventListener('click', () => {
+        familiaActiva = f.id;
+        renderArticulos();
+        marcarFamilia(f.id);
+      });
+      $familias.appendChild(b);
     });
 
-    $familias.appendChild(b);
-  });
-
-  marcarFamilia();
-}
-
+    marcarFamilia();
+  }
 
   function marcarFamilia(id=null){
     [...$familias.children].forEach(btn=>{
@@ -170,7 +176,7 @@ function renderFamilias() {
       btn.style.outline = '';
     });
     if(id===null) return;
-    const idx = id; // porque 0 es "TODAS"
+    const idx = id; // 0 es "TODAS"
     const btn = $familias.children[idx];
     if(btn){
       btn.style.filter = 'brightness(1.12)';
@@ -186,21 +192,16 @@ function renderFamilias() {
       .filter(pasaBusqueda)
       .filter(pasaFiltros);
 
-    // Título de arriba
-    // Actualizar etiqueta de familia activa a la derecha de "ARTÍCULOS"
-const famLabel = el('#familia-actual');
-if (famLabel) {
-  if (familiaActiva) {
-    const fam = familias.find(f => f.id === familiaActiva);
-    famLabel.textContent = fam ? `– ${fam.nombre.toUpperCase()}` : '';
-  } else {
-    famLabel.textContent = '– TODAS';
-  }
-}
-
-    $titulo.textContent = familiaActiva
-      ? (familias.find(f=>f.id===familiaActiva)?.nombre || 'MENÚ').toUpperCase()
-      : 'MENÚ (TODAS)';
+    // Etiqueta de familia activa al lado de “ARTÍCULOS”
+    const famLabel = el('#familia-actual');
+    if (famLabel) {
+      if (familiaActiva) {
+        const fam = familias.find(f => f.id === familiaActiva);
+        famLabel.textContent = fam ? `– ${fam.nombre.toUpperCase()}` : '';
+      } else {
+        famLabel.textContent = '– TODAS';
+      }
+    }
 
     if(list.length===0){
       const msg = document.createElement('div');
@@ -214,13 +215,7 @@ if (famLabel) {
     list.forEach(a=>{
       const b = document.createElement('button');
       b.className = `prod ${a.color}`;
-      b.innerHTML = `
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-          <div style="font-weight:900">${a.nombre.toUpperCase()}</div>
-          <div style="opacity:.85">€ ${eur(a.precio)}</div>
-          ${a.oferta ? '<div class="pill" style="margin-top:4px">OFERTA</div>' : ''}
-        </div>
-      `;
+      b.innerHTML = renderProductoHTML(a);   // ← precio arriba-derecha
       b.addEventListener('click', ()=> addToTicket(a));
       $articulos.appendChild(b);
     });
@@ -235,54 +230,60 @@ if (famLabel) {
       total += pvp;
 
       const tr = document.createElement('tr');
+      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`; // <-- clave estable
+      tr.dataset.key = rowKey;                                    // <-- NUEVO
+
       tr.innerHTML = `
         <td>${item.nombre}</td>
         <td>${item.cantidad}</td>
         <td>${eur(item.punit)}</td>
         <td>${eur(pvp)}</td>
       `;
-      // click para quitar 1 (igual que en el ejemplo de mesas con acciones rápidas)
+
+      // click para quitar 1
       tr.addEventListener('click', ()=>{
         item.cantidad -= 1;
         if(item.cantidad<=0) ticket = ticket.filter(x=>x!==item);
         renderTicket();
       });
+
       $ticketBody.appendChild(tr);
     });
 
     $total.textContent = eur(total);
+
+    // 🔔 Aplica el flash a la última línea añadida y el “pop” al total
+    if (lastAddedKey) {
+      const row = $ticketBody.querySelector(`tr[data-key="${lastAddedKey}"]`);
+      if (row) {
+        row.classList.remove('row-flash'); // permite re-disparar
+        void row.offsetWidth;              // reflow para reiniciar anim
+        row.classList.add('row-flash');
+      }
+      $total.classList.remove('bump');
+      void $total.offsetWidth;
+      $total.classList.add('bump');
+
+      lastAddedKey = null; // resetea
+    }
   }
 
   // =========================
   // 🧾 Ticket ops
   // =========================
   function addToTicket(art){
+    const key = `${art.nombre}::${art.precio.toFixed(2)}`; // <-- NUEVO
     const row = ticket.find(x => x.nombre === art.nombre && x.punit === art.precio);
     if(row) row.cantidad += 1;
     else ticket.push({ nombre: art.nombre, punit: art.precio, cantidad: 1 });
+
+    lastAddedKey = key;   // <-- di a quién animar
     renderTicket();
   }
 
   // =========================
-  // 🔍 Buscador + filtros “estado”
+  // 🔍 Buscador
   // =========================
-  (function crearFiltrosEstado(){
-    // 2 pills/checkboxes para simular “estado”
-    // caro: >10€ | oferta: flag aleatorio
-    $filtrosEstado.innerHTML = `
-      <label class="pill" style="cursor:pointer;display:flex;gap:6px;align-items:center;">
-        <input type="checkbox" id="chkCaro" style="accent-color:#d3b36b"> > 10€
-      </label>
-      <label class="pill" style="cursor:pointer;display:flex;gap:6px;align-items:center;">
-        <input type="checkbox" id="chkOferta" style="accent-color:#d3b36b"> Oferta
-      </label>
-    `;
-    const chkCaro = el('#chkCaro');
-    const chkOferta = el('#chkOferta');
-    chkCaro.addEventListener('change', ()=>{ filtros.caro = chkCaro.checked; renderArticulos(); });
-    chkOferta.addEventListener('change', ()=>{ filtros.oferta = chkOferta.checked; renderArticulos(); });
-  })();
-
   $inputBuscar.addEventListener('input', ()=> renderArticulos());
 
   // =========================
@@ -298,57 +299,40 @@ if (famLabel) {
     renderTicket();
   }
 
-  // el('#btn-aleatorio').addEventListener('click', randomizeAll);
-  el('#btn-vaciar').addEventListener('click', ()=>{ ticket = []; renderTicket(); });
+  // el('#btn-vaciar').addEventListener('click', ()=>{ ticket = []; renderTicket(); });
 
-
-    // =========================
+  // =========================
   // 🔁 Artículos Rápidos
   // =========================
+  el('#btn-rapidos').addEventListener('click', () => {
+    const seleccion = [];
+    const copia = [...articulos];
 
-  // 🧲 Botón "Artículos Rápidos"
-el('#btn-rapidos').addEventListener('click', () => {
-  // Selección aleatoria
-  const seleccion = [];
-  const copia = [...articulos];
+    while (seleccion.length < 12 && copia.length > 0) {
+      const index = Math.floor(Math.random() * copia.length);
+      seleccion.push(copia.splice(index, 1)[0]);
+    }
 
-  while (seleccion.length < 12 && copia.length > 0) {
-    const index = Math.floor(Math.random() * copia.length);
-    seleccion.push(copia.splice(index, 1)[0]);
-  }
-
-  const lista = el('#rapidos-list');
-  lista.innerHTML = '';
-  seleccion.forEach(a => {
-    const b = document.createElement('button');
-    b.className = `prod ${a.color}`;
-    b.innerHTML = `
-      <div style="display:flex;flex-direction:column;gap:6px;align-items:center">
-        <div style="font-weight:900">${a.nombre.toUpperCase()}</div>
-        <div style="opacity:.85">€ ${eur(a.precio)}</div>
-        ${a.oferta ? '<div class="pill" style="margin-top:4px">OFERTA</div>' : ''}
-      </div>
-    `;
-    b.addEventListener('click', () => {
-      addToTicket(a);
-      closeModal();
+    const lista = el('#rapidos-list');
+    lista.innerHTML = '';
+    seleccion.forEach(a => {
+      const b = document.createElement('button');
+      b.className = `prod ${a.color}`;
+      b.innerHTML = renderProductoHTML(a);   // ← mismo badge aquí
+      b.addEventListener('click', () => {
+        addToTicket(a);
+        closeModal();
+      });
+      lista.appendChild(b);
     });
-    lista.appendChild(b);
+
+    openModal();
   });
 
-  openModal();
-});
-
-
-function openModal() {
-  el('#modal-rapidos').classList.remove('hidden');
-}
-function closeModal() {
-  el('#modal-rapidos').classList.add('hidden');
-}
-
-el('#cerrar-modal').addEventListener('click', closeModal);
-el('#modal-rapidos .modal-backdrop').addEventListener('click', closeModal);
+  function openModal() { el('#modal-rapidos').classList.remove('hidden'); }
+  function closeModal() { el('#modal-rapidos').classList.add('hidden'); }
+  el('#cerrar-modal').addEventListener('click', closeModal);
+  el('#modal-rapidos .modal-backdrop').addEventListener('click', closeModal);
 
   // =========================
   // 🚀 Init

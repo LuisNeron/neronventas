@@ -38,10 +38,8 @@
     gap: 6px;
     padding: 6px 4px;
   }
-  /* 👇 Unificamos icono + label con variables */
   .sysbtn i{ font-size: var(--btn-icon-size); }
   .sysbtn span{ font-size: var(--btn-label-size); }
-
   .sysbtn--mini{ min-height:50px; }
 
   /* --------- Shell / layout --------- */
@@ -60,7 +58,6 @@
     padding:8px 10px;
     font-size:11px;
   }
-  .ticket-table tbody td{ padding:7px 8px; }
 
   .ticket-actions{ margin-top:2px; }
   .big-total{ font-size:28px; }
@@ -71,18 +68,24 @@
     gap:8px;
   }
 
-  /* --------- Controles (derecha) --------- */
-  .controls{ height: 22vh; }
+  /* ===========================
+     CONTROLES (derecha e izquierda)
+     =========================== */
+  .controls{
+    height: auto !important;          /* ← sin altura fija */
+    align-items: flex-start;          /* ← no estirar hijos */
+  }
 
+  /* izquierda/derecha (ancho relativo) */
   .controls-left{  width: 42vw; }
   .controls-right{ width: 58vw; }
 
-  /* ====== GRID EXTRA: 4x4 con botones idénticos ====== */
+  /* ====== GRID EXTRA: 4x2 ====== */
   .control-right-up{
     gap: var(--gap);
     padding: var(--gap);
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    grid-template-rows: repeat(4, 1fr) !important;
+    grid-template-rows: repeat(2, minmax(0,1fr)) !important; /* ← 2 filas */
     grid-auto-rows: 1fr;
     align-items: stretch;
     justify-items: stretch;
@@ -98,7 +101,6 @@
     gap: 6px;
     padding: 8px 6px;
   }
-  /* 👇 también usan las mismas variables */
   .control-right-up .sysbtn i{ font-size: var(--btn-icon-size); }
   .control-right-up .sysbtn span{
     font-size: var(--btn-label-size);
@@ -113,17 +115,22 @@
     overflow:hidden;
   }
 
-  .control-right-down{ padding: 0 var(--gap); }
+  /* ocultamos el reloj inferior en este breakpoint */
+  .control-right-down{ display:none; }
   .bottom-clock{ font-size:18px; }
 
-  /* --------- Columna izquierda --------- */
+  /* ===========================
+     COLUMNA IZQUIERDA (ticket+familias)
+     =========================== */
   .container-ticket-familias{
     width: var(--leftcol-w);
     flex: 0 0 var(--leftcol-w);
     gap: var(--gap);
   }
 
-  /* --------- Familias --------- */
+  /* ===========================
+     FAMILIAS
+     =========================== */
   .familias-panel{ border-radius: var(--radius); }
   .familias-title{ padding:8px 0; font-size:11px; }
 
@@ -139,7 +146,9 @@
   }
   .cat span{ padding:0 6px; }
 
-  /* --------- Artículos --------- */
+  /* ===========================
+     ARTÍCULOS
+     =========================== */
   .articles-panel{ border-radius: var(--radius); }
   .familia-actual{ margin-left:8px; font-size:.8rem; }
 
@@ -160,19 +169,41 @@
     font-size: .76rem;
   }
 
-  /* --------- Modal --------- */
-  .modal-content{
-    width: 94%;
-    height: 86%;
-    padding: 16px;
-  }
-  .grid-articulos{
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 10px;
-  }
-
-  /* --------- Scrollbars --------- */
+  /* ===========================
+     SCROLLBARS
+     =========================== */
   .ticket-grid::-webkit-scrollbar,
   .products-grid::-webkit-scrollbar,
   .categories::-webkit-scrollbar{ height:8px; width:8px; }
+
+  /* ===========================
+     QTY PAD COMPACTO (2×3) y que NO se estire
+     =========================== */
+  .controls-left{
+    align-self: flex-start;      /* ← clave para que no se estire verticalmente */
+    height: auto !important;
+    padding: 10px;
+    overflow: visible;
+  }
+
+  .qtypad{ gap:10px; }
+  .qtypad-left{
+    gap:8px;
+    width: max-content;          /* ancho justo al contenido */
+  }
+
+  .qty-display{
+    height: 34px;
+    padding: 4px 10px;
+    font-size: 20px;
+  }
+
+  /* grid del keypad en 2 columnas (2 3 / 4 5 / C ×) */
+  .qty-grid,
+  .qty-grid--2col{
+    grid-template-columns: repeat(2, 60px) !important;
+    gap: 8px;
+  }
+
+  .q{ height:46px; }
 }

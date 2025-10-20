@@ -1,263 +1,377 @@
 /* ===========================
    TOKENS
    =========================== */
-:root{
-  --bg:#0f1113;
-  --panel:#14171a;
-  --panel-2:#0d0f11;
-  --ink:#e7e7e7;
-  --muted:#a9b0b8;
-  --accent:#d3b36b;
-  --accent-ink:#1b1b1b;
-  --ok:#70e000;
+:root {
+  --bg: #0f1113;
+  --panel: #14171a;
+  --panel-2: #0d0f11;
+  --ink: #e7e7e7;
+  --muted: #a9b0b8;
+  --accent: #d3b36b;
+  --accent-ink: #1b1b1b;
+  --ok: #70e000;
 
-  --radius:14px;
-  --gap:12px;
-  --shadow:0 4px 14px rgba(0,0,0,.35);
-  --trans:.18s ease;
+  --radius: 14px;
+  --gap: 12px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, .35);
+  --trans: .18s ease;
 
-  --leftcol-w: 600px; /* ancho col. izquierda */
+  --leftcol-w: 600px;
+  --search-w: 150px;
+  /* ancho del buscador y del espaciador */
 }
 
 /* ===========================
    BASE
    =========================== */
-*{box-sizing:border-box}
-html,body{
-  height:100%;
-  margin:0;
-  background: var(--bg);
-  color:var(--ink);
-  font:15px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell;
-  overflow:hidden;
+* {
+  box-sizing: border-box
 }
 
-.app{
-  display:flex;
-  flex-direction:column;
-  gap:var(--gap);
-  height:100vh;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.35 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell;
+  overflow: hidden;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  height: 100vh;
   /* padding: 5px 10px 10px 10px; */
 }
 
 /* ===========================
    TOOLBAR (full width, sin scroll)
    =========================== */
-.toolbar{
-  display:grid;
+.toolbar {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: var(--gap);
   align-items: stretch;
-  width:100%;
-  overflow:hidden;             /* no barras */
+  width: 100%;
+  overflow: hidden;
+  /* no barras */
   padding-right: 10px;
   padding-left: 10px;
 }
-.sysbtn{
-  width:auto;                  /* la celda manda */
-  min-height:74px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  border-radius:var(--radius);
-  background:#2a2f35;
-  color:var(--ink);
-  box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,.06);
-  cursor:pointer;
-  transition:transform var(--trans),filter var(--trans),background var(--trans);
+
+.sysbtn {
+  width: auto;
+  /* la celda manda */
+  min-height: 74px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: var(--radius);
+  background: #2a2f35;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, .06);
+  cursor: pointer;
+  transition: transform var(--trans), filter var(--trans), background var(--trans);
 }
-.sysbtn i{font-size:22px;opacity:.95}
-.sysbtn span{font-weight:600;font-size:12px;opacity:.9;text-align:center}
-.sysbtn:hover{filter:brightness(1.05)}
-.sysbtn:active{transform:translateY(1px)}
-.sysbtn--accent{background:var(--accent);color:var(--accent-ink)}
+
+.sysbtn i {
+  font-size: 22px;
+  opacity: .95
+}
+
+.sysbtn span {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: .9;
+  text-align: center
+}
+
+.sysbtn:hover {
+  filter: brightness(1.05)
+}
+
+.sysbtn:active {
+  transform: translateY(1px)
+}
+
+.sysbtn--accent {
+  background: var(--accent);
+  color: var(--accent-ink)
+}
+
 /* versión compacta para EXTRAS a la derecha */
-.sysbtn--mini{min-height:64px;gap:6px}
+.sysbtn--mini {
+  min-height: 64px;
+  gap: 6px
+}
 
 /* ===========================
    GRID PRINCIPAL (2x2)
    =========================== */
-.shell{
-  display:flex;
-  gap:var(--gap);
-  flex:1;
-  width:100%;
-  height:100%;
-  overflow:hidden;
+.shell {
+  display: flex;
+  gap: var(--gap);
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
+
 /* ===========================
    DIV 2: TICKET
    =========================== */
-.ticket{
-  display:flex;
-  flex-direction:column;
-  background:var(--panel);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:12px;
-  height: 45vh;               /* altura fija */
-  overflow:hidden;
-  gap:10px;
+.ticket {
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px;
+  height: 45vh;
+  /* altura fija */
+  overflow: hidden;
+  gap: 10px;
 }
-.ticket-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+
+.ticket-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 }
-.ticket-head .title{font-weight:800;letter-spacing:.4px}
-.pills{display:flex;gap:8px;flex-wrap:wrap}
-.pill{
-  background:#2c343b;
-  border:1px solid rgba(255,255,255,.07);
-  padding:8px 12px;
-  border-radius:10px;
-  font-weight:700;
-  font-size:13px;
+
+.ticket-head .title {
+  font-weight: 800;
+  letter-spacing: .4px
 }
-.pill i{margin-right:6px;opacity:.85}
+
+.pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap
+}
+
+.pill {
+  background: #2c343b;
+  border: 1px solid rgba(255, 255, 255, .07);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.pill i {
+  margin-right: 6px;
+  opacity: .85
+}
+
+/* Pills con el mismo look que los botones acento */
+.pills .pill{
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.pills .pill i{
+  color: inherit;      /* que el icono no quede grisáceo */
+  opacity: .95;
+}
+
 
 /* Tabla del ticket — fondo blanco/gris SIEMPRE */
-.ticket-grid{
-  flex:1 1 auto;
-  min-height:0;
+.ticket-grid {
+  flex: 1 1 auto;
+  min-height: 0;
   /* zebra permanente, incluso con 0 filas */
   background: #f5f7fa;
-  border:1px solid rgba(0,0,0,.18);
-  border-radius:10px;
-  overflow:auto;
+  border: 1px solid rgba(0, 0, 0, .18);
+  border-radius: 10px;
+  overflow: auto;
 }
 
-.ticket-table{
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
+.ticket-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 /* Cabecera oscura como antes */
-.ticket-table thead th{
-  position:sticky; top:0; z-index:1;
-  background:#1a1f23; color:#fff;
-  text-align:left; font-size:12px; font-weight:700;
-  padding:10px 12px;
-  border-bottom:1px solid rgba(255,255,255,.12);
+.ticket-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #1a1f23;
+  color: #fff;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
 }
 
 /* Celdas: sin fondo propio, líneas finas y texto oscuro */
-.ticket-table tbody td{
-  background: transparent;                  /* ← importante */
-  padding:8px 10px;
-  color:#111;
-  border-bottom:1px solid rgba(0,0,0,.08);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+.ticket-table tbody td {
+  background: transparent;
+  /* ← importante */
+  /* padding:8px 10px;  TAMAÑO CELDAS TICKET */
+  color: #111;
+  border-bottom: 1px solid rgba(0, 0, 0, .08);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.ticket-table tbody tr:nth-child(odd){  background:#ffffff; }
-.ticket-table tbody tr:nth-child(even){ background:#f5f7fa; }
+
+.ticket-table tbody tr:nth-child(odd) {
+  background: #ffffff;
+}
+
+.ticket-table tbody tr:nth-child(even) {
+  background: #f5f7fa;
+}
 
 /* Separadores verticales */
 /* (opcional) separadores verticales */
 .ticket-table thead th+th,
-.ticket-table tbody td+td{
-  border-left:1px solid rgba(0,0,0,.08);
+.ticket-table tbody td+td {
+  border-left: 1px solid rgba(0, 0, 0, .08);
 }
+
 /* Pie del ticket */
-.ticket-actions{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:4px;
+.ticket-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
 }
-.big-total{font-size:34px;font-weight:900;color:var(--ok)}
-.btn-row{display:flex;gap:10px}
-.iconbtn{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:#26303a;
-  border:1px solid rgba(255,255,255,.07);
-  padding:10px 14px;
-  border-radius:12px;
-  cursor:pointer;
-  transition:filter var(--trans),transform var(--trans);
+
+.big-total {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--ok)
 }
-.iconbtn i{font-size:18px}
-.iconbtn:hover{filter:brightness(1.08)}
-.iconbtn:active{transform:translateY(1px)}
+
+.btn-row {
+  display: flex;
+  gap: 10px
+}
+
+.iconbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #26303a;
+  border: 1px solid rgba(255, 255, 255, .07);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: filter var(--trans), transform var(--trans);
+}
+
+.iconbtn i {
+  font-size: 18px
+}
+
+.iconbtn:hover {
+  filter: brightness(1.08)
+}
+
+.iconbtn:active {
+  transform: translateY(1px)
+}
 
 /* Scrollbar del grid del ticket en claro */
-.ticket-grid::-webkit-scrollbar-thumb{
-  background:#c7ccd1;
-  border-radius:999px;
+.ticket-grid::-webkit-scrollbar-thumb {
+  background: #c7ccd1;
+  border-radius: 999px;
 }
 
 /* ===========================
    DIV 3: CONTROLS (izq + der)
    =========================== */
 
+/* ===========================
+   FIX CONTROLES (anula debug)
+   =========================== */
 .controls {
-  display:flex;
-  gap:var(--gap);
-  height:20vh;
+  display: flex;
+  gap: var(--gap);
+  height: auto !important;
+  /* nada de 20vh fijos */
   width: 100%;
-  /* background-color: turquoise; */
 }
 
 .controls-left {
-  display:flex;
-  gap:var(--gap);
-  height:100px;
-  width:40vw;
-  height: 100%;
-  background-color: purple;
+  width: auto !important;
+  height: auto !important;
+  background: var(--panel) !important;
+  /* adiós morado */
+  border-radius: var(--radius);
+  padding: 12px;
+  flex: 0 0 auto;
+  /* se ajusta al contenido */
+  overflow: hidden;
+  /* que no sobresalga nada */
 }
 
 .controls-right {
-  display:flex;
+  width: auto !important;
+  height: auto !important;
+  flex: 1 1 auto;
+  /* ocupa el resto */
+  display: flex;
   flex-direction: column;
-  gap:var(--gap);
-  height:100px;
-  width:60vw;
-  height: 100%;
-  /* background-color: orange; */
+  gap: var(--gap);
 }
 
 /* contenedor derecho: arriba = grid de 4x2 */
-.control-right-up{
+.control-right-up {
   /* background-color: yellow;   tu color de debug */
   width: 100%;
   height: 80%;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);  /* 4 columnas */
-  grid-template-rows: repeat(2, 1fr);     /* 2 filas */
+  grid-template-columns: repeat(4, 1fr);
+  /* 4 columnas */
+  grid-template-rows: repeat(2, 1fr);
+  /* 2 filas */
   gap: var(--gap);
   padding: var(--gap);
 }
 
 /* que cada botón rellene su celda y tenga altura uniforme */
-.control-right-up .sysbtn{
+.control-right-up .sysbtn {
   height: 100%;
-  min-height: unset;           /* anula el min-height de .sysbtn */
+  min-height: unset;
+  /* anula el min-height de .sysbtn */
 }
 
 /* si los quieres más compactos aquí dentro */
-.control-right-up .sysbtn span{ font-size:12px; }
-.control-right-up .sysbtn i{ font-size:22px; }
+.control-right-up .sysbtn span {
+  font-size: 12px;
+}
 
-.control-right-down{
+.control-right-up .sysbtn i {
+  font-size: 22px;
+}
+
+.control-right-down {
   /* background-color: pink; quítalo si ya no quieres el color debug */
   width: 100%;
   height: 20%;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* pegado a la derecha */
+  justify-content: flex-end;
+  /* pegado a la derecha */
   padding: 0 var(--gap);
 }
 
-.bottom-clock{
+.bottom-clock {
   font-weight: 900;
   font-size: 20px;
   letter-spacing: .5px;
@@ -268,229 +382,352 @@ html,body{
 /* ===========================
    COLUMNA IZQUIERDA (ticket+familias)
    =========================== */
-.container-ticket-familias{
-  display:flex;
-  flex-direction:column;
-  width:600px;                 /* ancho fijo */
-  flex:0 0 600px;
-  gap:var(--gap);
-  height:100%;
-  overflow:hidden;
+.container-ticket-familias {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  /* ancho fijo */
+  flex: 0 0 600px;
+  gap: var(--gap);
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ===========================
    DIV 4: FAMILIAS (con imagen)
    =========================== */
-.familias-panel{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  background:var(--panel);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
+.familias-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
-.familias-title{
-  margin:0;
-  font-size:12px;
-  letter-spacing:.4px;
-  opacity:.8;
-  font-weight:800;
-  display:flex;
-  justify-content:center;
-  padding:10px 0;
+
+.familias-title {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: .4px;
+  opacity: .8;
+  font-weight: 800;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
 }
-.categories{
-  display:grid;
-  gap:8px;
-  grid-template-columns:repeat(5, 1fr);
-  align-content:start;
-  flex:1;
-  overflow-y:auto;
-  padding:10px;
+
+.categories {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(5, 1fr);
+  align-content: start;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
 }
-.cat{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color:#fff;
-  border-radius:var(--radius);
-  font-weight:900;
-  min-height:70px;            /* antes 90px */
-  font-size:.85rem;           /* más compacto */
-  cursor:pointer;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  border:1px solid rgba(255,255,255,0.07);
-  transition:transform var(--trans),filter var(--trans);
-  background:#1e1e1e;
+
+.cat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  border-radius: var(--radius);
+  font-weight: 900;
+  min-height: 70px;
+  /* antes 90px */
+  font-size: .85rem;
+  /* más compacto */
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: transform var(--trans), filter var(--trans);
+  background: #1e1e1e;
 }
-.cat::before{
-  content:"";
-  position:absolute; inset:0;
-  background-image:var(--bg-img);
-  background-size:cover; background-position:center;
-  filter:brightness(0.55);
-  transition:filter var(--trans);
+
+.cat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-img);
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.55);
+  transition: filter var(--trans);
 }
-.cat::after{
-  content:"";
-  position:absolute; inset:0;
-  background:rgba(0,0,0,0.15);
-  transition:background var(--trans);
+
+.cat::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.15);
+  transition: background var(--trans);
 }
-.cat span{position:relative; z-index:2; padding:0 8px; text-shadow:0 2px 4px rgba(0,0,0,0.6)}
-.cat:hover::before{filter:brightness(0.75)}
-.cat:hover::after{background:rgba(0,0,0,0.25)}
-.cat:active{transform:translateY(1px)}
-.cat.active{outline:2px solid var(--accent); filter:brightness(1.15)}
+
+.cat span {
+  position: relative;
+  z-index: 2;
+  padding: 0 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6)
+}
+
+.cat:hover::before {
+  filter: brightness(0.75)
+}
+
+.cat:hover::after {
+  background: rgba(0, 0, 0, 0.25)
+}
+
+.cat:active {
+  transform: translateY(1px)
+}
+
+.cat.active {
+  outline: 2px solid var(--accent);
+  filter: brightness(1.15)
+}
 
 /* ===========================
    DIV 5: ARTÍCULOS
    =========================== */
-.articles-panel{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  background:var(--panel);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
+.articles-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
-.familia-actual{
-  font-weight:800;
-  font-size:.9rem;
-  margin-left:10px;
-  color:var(--accent);
-  opacity:.9;
-  text-transform:uppercase;
+
+.familia-actual {
+  font-weight: 800;
+  font-size: .9rem;
+  margin-left: 10px;
+  color: var(--accent);
+  opacity: .9;
+  text-transform: uppercase;
 }
-.products-grid{
-  display:grid;
-  gap:8px;
-  grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
-  align-content:start;
-  flex:1;
-  overflow-y:auto;
-  padding:10px;
+
+.products-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  align-content: start;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
 }
-.prod{
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:10px 8px;
-  font-size:.85rem;
-  border-radius:var(--radius);
-  border:1px solid rgba(255,255,255,.07);
-  background:#1c2329;         /* base neutro oscuro */
-  font-weight:800;
-  height:90px;                 /* altura fija uniforme */
-  box-shadow:var(--shadow);
-  cursor:pointer;
-  overflow:hidden;
-  transition:transform var(--trans), filter var(--trans);
-  flex:0 0 auto;               /* evita estirarse por contenido */
+
+.prod {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10px 8px;
+  font-size: .85rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, .07);
+  background: #1c2329;
+  /* base neutro oscuro */
+  font-weight: 800;
+  height: 90px;
+  /* altura fija uniforme */
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform var(--trans), filter var(--trans);
+  flex: 0 0 auto;
+  /* evita estirarse por contenido */
 }
-.prod > div{
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-  text-align:center;
+
+.prod>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
 }
-.prod::before{
-  content:"";
-  position:absolute; inset:0;
-  opacity:.9;
-  background:var(--prod-color,#20303a);
-  z-index:0;
-  border-radius:inherit;
-  transition:filter var(--trans);
+
+.prod::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .9;
+  background: var(--prod-color, #20303a);
+  z-index: 0;
+  border-radius: inherit;
+  transition: filter var(--trans);
 }
-.prod > *{position:relative; z-index:2}
-.prod:hover::before{filter:brightness(1.1)}
-.prod:active{transform:translateY(1px)}
+
+.prod>* {
+  position: relative;
+  z-index: 2
+}
+
+.prod:hover::before {
+  filter: brightness(1.1)
+}
+
+.prod:active {
+  transform: translateY(1px)
+}
 
 /* ===========================
    COLORES DE PRODUCTOS
    =========================== */
-.is-yellow{ --prod-color:#ffe16a; color:#222; }
-.is-cyan  { --prod-color:#7cf1ff; color:#0b2230; }
-.is-green { --prod-color:#74f7a1; color:#0e2216; }
-.is-red   { --prod-color:#ff5b5b; color:#1a0e0e; }
-.is-lilac { --prod-color:#e5a6ff; color:#220d2a; }
+.is-yellow {
+  --prod-color: #ffe16a;
+  color: #222;
+}
+
+.is-cyan {
+  --prod-color: #7cf1ff;
+  color: #0b2230;
+}
+
+.is-green {
+  --prod-color: #74f7a1;
+  color: #0e2216;
+}
+
+.is-red {
+  --prod-color: #ff5b5b;
+  color: #1a0e0e;
+}
+
+.is-lilac {
+  --prod-color: #e5a6ff;
+  color: #220d2a;
+}
 
 /* ===========================
    SCROLLBARS
    =========================== */
 .ticket-grid::-webkit-scrollbar,
 .products-grid::-webkit-scrollbar,
-.categories::-webkit-scrollbar{height:10px;width:10px}
+.categories::-webkit-scrollbar {
+  height: 10px;
+  width: 10px
+}
+
 .ticket-grid::-webkit-scrollbar-thumb,
 .products-grid::-webkit-scrollbar-thumb,
-.categories::-webkit-scrollbar-thumb{background:#2f3a44;border-radius:999px}
+.categories::-webkit-scrollbar-thumb {
+  background: #2f3a44;
+  border-radius: 999px
+}
 
 /* ===========================
    MODAL (Artículos Rápidos)
    =========================== */
-.modal{
-  position:fixed; inset:0; z-index:1000;
-  display:flex; justify-content:center; align-items:center;
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.modal.hidden{display:none}
-.modal-backdrop{
-  position:absolute; inset:0; background:rgba(0,0,0,.6);
+
+.modal.hidden {
+  display: none
 }
-.modal-content{
-  position:relative; z-index:1;
-  background:#1a1a1a; color:#fff;
-  padding:20px; border-radius:8px;
-  width:90%; height:80%; max-width:960px;
-  overflow:hidden;
-  display:flex; flex-direction:column;
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, .6);
 }
-.modal-content h2{margin:0 0 16px; font-size:1.6em}
-.grid-articulos{
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));
-  gap:12px; overflow-y:auto; flex-grow:1; padding-right:8px;
+
+.modal-content {
+  position: relative;
+  z-index: 1;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  height: fit-content;
+  max-width: 960px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
+
+.modal-content h2 {
+  margin: 0 0 16px;
+  font-size: 1.6em
+}
+
+.grid-articulos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* más compacto y flexible */
+  gap: 8px;                          /* menos separación vertical y horizontal */
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;                /* evita scroll lateral */
+  padding: 8px 10px 10px;            /* acolchado más equilibrado */
+  align-content: start;              /* evita huecos al final del grid */
+  justify-items: stretch;            /* que todos los botones llenen su columna */
+  scrollbar-width: thin;             /* scroll discreto (Firefox) */
+  scroll-behavior: smooth;           /* desplazamiento suave */
+}
+
+/* Scrollbar visual (para Chrome/Webkit) */
+.grid-articulos::-webkit-scrollbar {
+  width: 8px;
+}
+
+.grid-articulos::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
+}
+
+.grid-articulos::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 /* que no pise los demás botones */
-.modal .iconbtn{
-  margin-top:14px;
-  padding:10px 14px;
-  background:#444;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  align-self:flex-end;
-  cursor:pointer;
+.modal .iconbtn {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: #444;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  align-self: flex-end;
+  cursor: pointer;
 }
-.modal .iconbtn:hover{background:#666}
+
+.modal .iconbtn:hover {
+  background: #666
+}
 
 /* ===========================
    CONTENEDOR DERECHA (controls+artículos)
    =========================== */
-.container-controls-articulos{
-  display:flex;
-  flex-direction:column;
-  flex:1;
-  gap:var(--gap);
-  height:100%;
-  overflow:hidden;
+.container-controls-articulos {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--gap);
+  height: 100%;
+  overflow: hidden;
 }
 
 /* ===========================
    BOTONES MINI (en ticket)
    =========================== */
 
-.ticket .sysbtn.sysbtn--mini{
+.ticket .sysbtn.sysbtn--mini {
   flex-direction: row;
   min-height: 56px;
   gap: 10px;
@@ -499,19 +736,35 @@ html,body{
 
 /* ——— Efecto de alta de línea en el ticket ——— */
 @keyframes ticketFlash {
-  0%   { box-shadow: inset 0 0 0 9999px rgba(211,179,107,.28); } /* velo dorado MUY suave */
-  100% { box-shadow: inset 0 0 0 9999px rgba(211,179,107,0); }
+  0% {
+    box-shadow: inset 0 0 0 9999px rgba(211, 179, 107, .28);
+  }
+
+  /* velo dorado MUY suave */
+  100% {
+    box-shadow: inset 0 0 0 9999px rgba(211, 179, 107, 0);
+  }
 }
+
 .ticket-table tbody tr.row-flash {
   animation: ticketFlash 900ms ease-out;
 }
 
 /* ——— Mini “pop” del total ——— */
 @keyframes totalPop {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.06); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
+
 .big-total.bump {
   animation: totalPop 220ms ease-out;
 }
@@ -520,29 +773,248 @@ html,body{
    ETIQUETA DE PRECIO EN PRODUCTOS
    =========================== */
 /* --- Precio arriba a la derecha en cada producto --- */
-.prod { position: relative; }
+.prod {
+  position: relative;
+}
 
-.prod .price-tag{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    padding: 2px 8px;
-    border-radius: 0px;
-    font-weight: 900;
-    font-size: .82rem;
-    line-height: 1;
-    background: rgb(0 0 0 / 57%);
-    color: #ffffff;
-    /* border: 1px solid rgba(0, 0, 0, .12); */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
-    pointer-events: none;
-    Z-INDEX: 10;
+.prod .price-tag {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 2px 8px;
+  border-radius: 0px;
+  font-weight: 900;
+  font-size: .82rem;
+  line-height: 1;
+  background: rgb(0 0 0 / 57%);
+  color: #ffffff;
+  /* border: 1px solid rgba(0, 0, 0, .12); */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+  pointer-events: none;
+  Z-INDEX: 10;
 }
 
 /* (opcional) versión compacta si el botón es pequeño */
-.prod--compact .price-tag{
+.prod--compact .price-tag {
   padding: 2px 6px;
   font-size: .78rem;
 }
 
+/* ===========================
+   QTY PAD (DISPLAY ARRIBA + KEYPAD ABAJO)
+   =========================== */
+.controls-left {
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 10px;
+}
 
+/* contenedor del pad */
+.qtypad {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+/* columna izquierda: “×N” arriba y keypad debajo */
+.qtypad-left {
+  display: flex;
+  flex-direction: column;
+  /* ← clave: en columna */
+  gap: 10px;
+  width: 260px;
+  /* ajusta a tu gusto */
+}
+
+/* “×N” (display) como pastilla arriba */
+.qty-display {
+  align-self: flex-start;
+  min-width: auto;
+  width: 100%; /* que la pastilla ocupe justo ese ancho */
+  height: 40px;
+  padding: 6px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 24px;
+  background: #0d0f11;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 12px;
+}
+
+/* keypad debajo (2,3,4,5,6,C) */
+.qty-grid {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  grid-template-columns: repeat(3, 64px);
+  /* 3 columnas */
+}
+
+.qty-grid--compact {
+  grid-template-columns: repeat(2, 56px);
+}
+
+/* si lo usas en móvil */
+
+/* ===========================
+   QTY PAD → versión 2 columnas
+   =========================== */
+.qty-grid--2col {
+  grid-template-columns: repeat(2, 64px);
+  justify-content: start;
+  gap: 10px;
+}
+
+/* Botón “×” (opcional, para destacarlo) */
+.q.q-apply {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: rgba(255, 255, 255, .12);
+}
+
+.q.q-apply:hover {
+  filter: brightness(1.05);
+}
+
+/* ancho cómodo del bloque izquierdo del pad */
+.qtypad-left {
+  width: max-content;
+  /* o: width: fit-content; */
+}
+
+
+/* botón del keypad */
+.q {
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  background: #2a2f35;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter var(--trans), transform var(--trans);
+}
+
+.q:hover {
+  filter: brightness(1.08)
+}
+
+.q:active {
+  transform: translateY(1px)
+}
+
+/* botón “C” (clear) */
+.q.q-clear {
+  background: transparent;
+  border-style: dashed;
+  color: #ffb4b4;
+}
+
+.q.q-clear:hover {
+  background: #2a2f35;
+  color: #fff;
+}
+
+/* columna derecha (por si añades algo al lado del pad) */
+.qtypad-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* mini “pop” cuando cambias la cantidad */
+@keyframes qtyPop {
+  0% {
+    transform: scale(1)
+  }
+
+  50% {
+    transform: scale(1.06)
+  }
+
+  100% {
+    transform: scale(1)
+  }
+}
+
+#qty-display.bump {
+  animation: qtyPop 180ms ease-out;
+}
+
+/* (opcional) si no quieres ver el mensaje de ayuda “×N listo …” */
+.qty-hint {
+  display: none !important;
+}
+
+
+/* ===========================
+   HEADER ARTÍCULOS (BUSCADOR IZQ + TÍTULO CENTRADO)
+   =========================== */
+.articles-header{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    /* display: grid
+; */
+    grid-template-columns: var(--search-w) 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: var(--panel);
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    display: flex
+;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* buscador (columna izquierda) */
+.articles-header .search-input {
+  width: 150px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #0d0f11;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .08);
+  font-weight: 700;
+}
+
+/* título centrado geométricamente (columna central) */
+.articles-title {
+  margin: 0;
+  justify-self: center;
+  /* ← centra el título */
+  font-size: 12px;
+  letter-spacing: .4px;
+  opacity: .85;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+}
+
+.articles-title .familia-actual {
+  margin: 0;
+  color: var(--accent);
+  opacity: .9;
+}
+
+.articles-clock{
+  justify-self: end;          /* pegado a la derecha */
+  font-weight: 900;
+  font-size: 16px;            /* súbelo si lo quieres más grande */
+  letter-spacing: .5px;
+  opacity: .95;
+}
+
+/* espaciador derecho (columna derecha) */
+.ah-spacer {
+  width: 100%;
+}

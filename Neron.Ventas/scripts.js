@@ -36,40 +36,58 @@ document.addEventListener('DOMContentLoaded', () => {
   let articulos = [];  // [{id, familiaId, nombre, precio, color}]
   let familiaActiva = null;
   let ticket = [];     // [{nombre, punit, cantidad}]
-  let lastAddedKey = null; 
+  let lastAddedKey = null;
 
-  // =========================
-  // ⏰ Reloj + Tarifa
-  // =========================
-  //(dd/mm/yyyy HH:MM:SS)
+  // ——— QtyPad ———
+  let pendingQty = 1;  // cantidad a aplicar al próximo click
+  const $qtyValue = document.querySelector('#qty-value');
+  const $qtyHint  = document.querySelector('#qty-hint');
+
+// =========================
+// ⏰ Reloj + Tarifa
+// =========================
 el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
 
-(function startBottomClock(){
-  // Quita el reloj antiguo del ticket si existe
-  const old = document.querySelector('#clock-pill');
-  if (old && old.parentElement) old.parentElement.removeChild(old);
-
-  const $bottomClock = document.querySelector('#reloj-bottom');
+(function startClocks(){
+  const $bottomClock   = document.querySelector('#reloj-bottom');
+  const $articlesClock = document.querySelector('#clock-articles'); // ← nuevo
   const pad = n => String(n).padStart(2,'0');
 
   const tick = () => {
     const d = new Date();
-    // const fecha = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
-    const hora  = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-    if ($bottomClock) $bottomClock.textContent = `${hora}`;
+    const hora = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    if ($bottomClock)   $bottomClock.textContent   = hora;
+    if ($articlesClock) $articlesClock.textContent = hora;  // ← actualizar cabecera de artículos
   };
 
-  tick();                 // pinta ya
-  setInterval(tick, 1000); // y cada segundo
+  tick();
+  setInterval(tick, 1000);
 })();
 
 
   // =========================
   // Utils y datos dummy
   // =========================
-  const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const rnd  = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
   const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-  const eur = n => n.toFixed(2).replace('.', ',');
+  const eur  = n => n.toFixed(2).replace('.', ',');
+
+  function setQty(n){
+    pendingQty = Math.max(1, n|0);
+    const d = document.querySelector('#qty-display');
+    if (!d) return;
+    d.classList.add('bump');
+    if ($qtyValue) $qtyValue.textContent = pendingQty;
+    showQtyHint();
+    setTimeout(()=>d.classList.remove('bump'),180);
+  }
+  
+  function showQtyHint() { /* no-op; dejamos el hint oculto */ }
+
+  // function showQtyHint(){
+  //   if(!$qtyHint) return;
+  //   $qtyHint.textContent = pendingQty>1 ? `×${pendingQty} listo — toca un artículo` : '';
+  // }
 
   // 🖼️ Imágenes de fondo de las familias
   const urls = [
@@ -113,20 +131,17 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
   }
 
   // =========================
-  // 🔎 Búsqueda (sin filtros extra)
+  // 🔎 Búsqueda
   // =========================
   function pasaBusqueda(a){
-    const t = ($inputBuscar.value || '').trim().toLowerCase();
+    const t = ($inputBuscar?.value || '').trim().toLowerCase();
     if(!t) return true;
     return a.nombre.toLowerCase().includes(t);
   }
-  function pasaFiltros(a){
-    // No hay filtros (>10€, oferta). Todo pasa.
-    return true;
-  }
+  function pasaFiltros(a){ return true; }
 
   // =========================
-  // 🧩 HTML de cada producto (precio arriba-derecha)
+  // 🧩 HTML de cada producto
   // =========================
   function renderProductoHTML(a){
     return `
@@ -192,7 +207,7 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
       .filter(pasaBusqueda)
       .filter(pasaFiltros);
 
-    // Etiqueta de familia activa al lado de “ARTÍCULOS”
+    // Etiqueta familia activa
     const famLabel = el('#familia-actual');
     if (famLabel) {
       if (familiaActiva) {
@@ -215,8 +230,8 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
     list.forEach(a=>{
       const b = document.createElement('button');
       b.className = `prod ${a.color}`;
-      b.innerHTML = renderProductoHTML(a);   // ← precio arriba-derecha
-      b.addEventListener('click', ()=> addToTicket(a));
+      b.innerHTML = renderProductoHTML(a);
+      b.addEventListener('click', ()=> addToTicket(a, pendingQty));
       $articulos.appendChild(b);
     });
   }
@@ -230,8 +245,8 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
       total += pvp;
 
       const tr = document.createElement('tr');
-      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`; // <-- clave estable
-      tr.dataset.key = rowKey;                                    // <-- NUEVO
+      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`;
+      tr.dataset.key = rowKey;
 
       tr.innerHTML = `
         <td>${item.nombre}</td>
@@ -252,33 +267,39 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
 
     $total.textContent = eur(total);
 
-    // 🔔 Aplica el flash a la última línea añadida y el “pop” al total
+    // efecto "flash" última línea + pop total
     if (lastAddedKey) {
       const row = $ticketBody.querySelector(`tr[data-key="${lastAddedKey}"]`);
       if (row) {
-        row.classList.remove('row-flash'); // permite re-disparar
-        void row.offsetWidth;              // reflow para reiniciar anim
+        row.classList.remove('row-flash');
+        void row.offsetWidth;
         row.classList.add('row-flash');
       }
       $total.classList.remove('bump');
       void $total.offsetWidth;
       $total.classList.add('bump');
 
-      lastAddedKey = null; // resetea
+      lastAddedKey = null;
     }
   }
 
   // =========================
   // 🧾 Ticket ops
   // =========================
-  function addToTicket(art){
-    const key = `${art.nombre}::${art.precio.toFixed(2)}`; // <-- NUEVO
+  function addToTicket(art, qty = pendingQty){
+    const key = `${art.nombre}::${art.precio.toFixed(2)}`;
     const row = ticket.find(x => x.nombre === art.nombre && x.punit === art.precio);
-    if(row) row.cantidad += 1;
-    else ticket.push({ nombre: art.nombre, punit: art.precio, cantidad: 1 });
 
-    lastAddedKey = key;   // <-- di a quién animar
+    if(row) row.cantidad += qty;
+    else ticket.push({ nombre: art.nombre, punit: art.precio, cantidad: qty });
+
+    lastAddedKey = key;
     renderTicket();
+
+    // reset qty a ×1 siempre
+    pendingQty = 1;
+    if ($qtyValue) $qtyValue.textContent = 1;
+    showQtyHint();
   }
 
   // =========================
@@ -287,7 +308,7 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
   $inputBuscar.addEventListener('input', ()=> renderArticulos());
 
   // =========================
-  // 🔁 Randomize + Vaciar
+  // 🔁 Randomize + Init
   // =========================
   function randomizeAll(){
     genFamilias();
@@ -299,10 +320,28 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
     renderTicket();
   }
 
-  // el('#btn-vaciar').addEventListener('click', ()=>{ ticket = []; renderTicket(); });
+  // =========================
+  // 🔢 Keypad (2..6 y C)
+  // =========================
+  document.querySelectorAll('.q[data-q]').forEach(btn=>{
+    btn.addEventListener('click', ()=> setQty(parseInt(btn.dataset.q,10)));
+  });
+  const $btnClear = document.querySelector('#qty-clear');
+  if ($btnClear) {
+    $btnClear.addEventListener('click', ()=>{
+      pendingQty = 1; if ($qtyValue) $qtyValue.textContent = 1; showQtyHint();
+    });
+  }
+
+  // Teclado: 2..6 y C/c (si no estás escribiendo en el buscador)
+  document.addEventListener('keydown', (e)=>{
+    if (document.activeElement === $inputBuscar) return;
+    if (/[2-6]/.test(e.key)) setQty(parseInt(e.key,10));
+    if (e.key.toLowerCase() === 'c') { pendingQty = 1; if ($qtyValue) $qtyValue.textContent = 1; showQtyHint(); }
+  });
 
   // =========================
-  // 🔁 Artículos Rápidos
+  // ⚡ Artículos Rápidos (usa pendingQty)
   // =========================
   el('#btn-rapidos').addEventListener('click', () => {
     const seleccion = [];
@@ -318,9 +357,9 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
     seleccion.forEach(a => {
       const b = document.createElement('button');
       b.className = `prod ${a.color}`;
-      b.innerHTML = renderProductoHTML(a);   // ← mismo badge aquí
+      b.innerHTML = renderProductoHTML(a);
       b.addEventListener('click', () => {
-        addToTicket(a);
+        addToTicket(a, pendingQty); // ← respeta la cantidad
         closeModal();
       });
       lista.appendChild(b);
@@ -334,8 +373,6 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
   el('#cerrar-modal').addEventListener('click', closeModal);
   el('#modal-rapidos .modal-backdrop').addEventListener('click', closeModal);
 
-  // =========================
   // 🚀 Init
-  // =========================
   randomizeAll();
 });

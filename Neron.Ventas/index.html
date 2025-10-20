@@ -41,7 +41,11 @@
           <div class="ticket-head">
             <div class="title">MOSTRADOR de CAFETERIA</div>
             <div class="pills">
-              <div class="pill" id="user-pill"><i class="fa-solid fa-user"></i> Usuario 1</div>
+              <div class="pill" id="user-pill">
+                <a href="/Neron.Operadores/index.html" class="pill-link">
+                  <i class="fa-solid fa-user"></i> Usuario 1
+                </a>
+              </div>
               <div class="pill" id="tarifa-pill">Tarifa 1</div>
             </div>
           </div>
@@ -84,27 +88,27 @@
         <!-- DIV 3: CONTROLS (IZQ + DER PARA EXTRAS) -->
         <!-- ===================== -->
         <section class="controls" aria-label="Controles y filtros">
-<div class="controls-left">
-  <!-- Qty Pad: display arriba + keypad 3×3 -->
-  <div class="qtypad">
-    <div class="qtypad-left">
-      <!-- Display de cantidad -->
-      <div class="qty-display" id="qty-display" aria-live="polite">
-        ×<span id="qty-value">1</span>
-      </div>
-<div class="qty-grid qty-grid--2col">
-  <button class="q" data-q="2">2</button>
-  <button class="q" data-q="3">3</button>
+          <div class="controls-left">
+            <!-- Qty Pad: display arriba + keypad 3×3 -->
+            <div class="qtypad">
+              <div class="qtypad-left">
+                <!-- Display de cantidad -->
+                <div class="qty-display" id="qty-display" aria-live="polite">
+                  ×<span id="qty-value">1</span>
+                </div>
+                <div class="qty-grid qty-grid--2col">
+                  <button class="q" data-q="2">2</button>
+                  <button class="q" data-q="3">3</button>
 
-  <button class="q" data-q="4">4</button>
-  <button class="q" data-q="5">5</button>
+                  <button class="q" data-q="4">4</button>
+                  <button class="q" data-q="5">5</button>
 
-  <button class="q q-clear" id="qty-clear" title="Borrar cantidad">C</button>
-  <button class="q q-apply" id="qty-apply" title="Aplicar cantidad">×</button>
-</div>
-    </div>
-  </div>
-</div>
+                  <button class="q q-clear" id="qty-clear" title="Borrar cantidad">C</button>
+                  <button class="q q-apply" id="qty-apply" title="Aplicar cantidad">×</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
 
@@ -124,7 +128,7 @@
             </div>
 
             <div class="control-right-down">
-             
+
             </div>
           </div>
         </section>
@@ -133,12 +137,12 @@
         <!-- DIV 5: ARTÍCULOS -->
         <!-- ===================== -->
         <section class="articles-panel" aria-label="Artículos">
-<div class="articles-header">
-  <input id="inputBuscar" class="search-input" placeholder="Buscar artículo…">
-  <h4 class="articles-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
-  <!-- antes había <div class="ah-spacer"></div> -->
-  <div id="clock-articles" class="articles-clock" aria-live="polite">--:--:--</div>
-</div>
+          <div class="articles-header">
+            <input id="inputBuscar" class="search-input" placeholder="Buscar artículo…">
+            <h4 class="articles-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
+            <!-- antes había <div class="ah-spacer"></div> -->
+            <div id="clock-articles" class="articles-clock" aria-live="polite">--:--:--</div>
+          </div>
 
 
           <div class="products-grid" id="articulos"><!-- JS --></div>

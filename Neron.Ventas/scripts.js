@@ -26,8 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const $familias    = el('#familias');
   const $articulos   = el('#articulos');
   const $ticketBody  = el('#ticket-body');
+  const $ticketBodyModif  = el('#ticket-body-modif');
   const $total       = el('#ticket-total');
   const $inputBuscar = el('#inputBuscar');
+  const $selPreview = document.querySelector('.selection-modal-modif');
 
   // =========================
   // 🧠 Estado
@@ -140,6 +142,22 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
   }
   function pasaFiltros(a){ return true; }
 
+  let selectedKey = null; // ← clave de la fila seleccionada (compartida entre ambas tablas)
+
+  function clearSelectionIn(tbody) {
+    tbody.querySelectorAll('tr.selected').forEach(tr => tr.classList.remove('selected'));
+  }
+
+  function highlightInModalByKey(key, { scroll = true } = {}) {
+    if (!key) return;
+    const row = $ticketBodyModif.querySelector(`tr[data-key="${key}"]`);
+    if (!row) return;
+    clearSelectionIn($ticketBodyModif);
+    row.classList.add('selected');
+    if (scroll) row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+
   // =========================
   // 🧩 HTML de cada producto
   // =========================
@@ -245,7 +263,7 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
       total += pvp;
 
       const tr = document.createElement('tr');
-      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`;
+      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`; // ← MISMA clave en ambas tablas
       tr.dataset.key = rowKey;
 
       tr.innerHTML = `
@@ -255,11 +273,19 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
         <td>${eur(pvp)}</td>
       `;
 
-      // click para quitar 1
+      // Al hacer click en una fila del ticket principal:
+      // 1) guardamos la clave seleccionada
+      // 2) abrimos el modal
+      // 3) renderizamos la tabla del modal (por si cambió)
+      // 4) destacamos la misma fila dentro del modal
       tr.addEventListener('click', ()=>{
-        item.cantidad -= 1;
-        if(item.cantidad<=0) ticket = ticket.filter(x=>x!==item);
-        renderTicket();
+        selectedKey = rowKey;
+        openModalModif();
+        renderTicketModif();                 // asegura que el modal está actualizado
+        requestAnimationFrame(() => {        // garantiza que los <tr> existen antes de buscar
+          highlightInModalByKey(selectedKey);
+        });
+        updateSelectedPreview();
       });
 
       $ticketBody.appendChild(tr);
@@ -283,6 +309,42 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
     }
   }
 
+  function renderTicketModif(){
+    $ticketBodyModif.innerHTML = '';
+    let total = 0;
+
+    ticket.forEach(item=>{
+      const pvp = item.cantidad * item.punit;
+      total += pvp;
+
+      const tr = document.createElement('tr');
+      const rowKey = `${item.nombre}::${item.punit.toFixed(2)}`; // ← MISMA clave
+      tr.dataset.key = rowKey;
+
+      tr.innerHTML = `
+        <td>${item.nombre}</td>
+        <td>${item.cantidad}</td>
+        <td>${eur(item.punit)}</td>
+        <td>${eur(pvp)}</td>
+      `;
+
+      // Permite cambiar la selección dentro del modal
+      tr.addEventListener('click', ()=>{
+        selectedKey = rowKey;                     // ← guarda la nueva selección
+        clearSelectionIn($ticketBodyModif);
+        tr.classList.add('selected');
+        updateSelectedPreview();
+      });
+
+      $ticketBodyModif.appendChild(tr);
+    });
+
+    // ← restaura selección previa si existe (no hace scroll para no marear si fue un simple re-render)
+    if (selectedKey) highlightInModalByKey(selectedKey, { scroll: false });
+    updateSelectedPreview();
+    $total.textContent = eur(total);
+  }
+
   // =========================
   // 🧾 Ticket ops
   // =========================
@@ -295,6 +357,7 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
 
     lastAddedKey = key;
     renderTicket();
+    renderTicketModif();
 
     // reset qty a ×1 siempre
     pendingQty = 1;
@@ -373,6 +436,81 @@ el('#tarifa-pill').textContent = `Tarifa ${CONFIG.tarifa}`;
   el('#cerrar-modal').addEventListener('click', closeModal);
   el('#modal-rapidos .modal-backdrop').addEventListener('click', closeModal);
 
+  const modificarBtn = document.getElementById("btn-modificar")
+  const cerrarModificar = document.getElementById("cerrar-modal-modificar")
+  function openModalModif() { el("#modal-modificar").classList.remove('hidden'); }
+  function closeModalModif() { el("#modal-modificar").classList.add('hidden'); }
+  modificarBtn.addEventListener('click', openModalModif);
+  cerrarModificar.addEventListener('click', closeModalModif);
+
+// =========================
+// 🗑️ Borrados
+// =========================
+document.getElementById('btn-borrar-linea')?.addEventListener('click', deleteSelectedLine);
+document.getElementById('btn-borrar-todo') ?.addEventListener('click', deleteAllLines);
+
+function deleteSelectedLine() {
+  // Si no hay selección, intenta leerla del modal
+  if (!selectedKey) {
+    const sel = $ticketBodyModif.querySelector('tr.selected');
+    if (sel) selectedKey = sel.dataset.key || null;
+    
+  }
+  if (!selectedKey) return; // nada que borrar
+
+  const idx = ticket.findIndex(it => `${it.nombre}::${it.punit.toFixed(2)}` === selectedKey);
+  if (idx === -1) return;
+
+  // Quitar del modelo
+  ticket.splice(idx, 1);
+
+  // Elegir nueva selección (siguiente o anterior)
+  if (ticket.length > 0) {
+    const newIndex = Math.min(idx, ticket.length - 1);
+    const it = ticket[newIndex];
+    selectedKey = `${it.nombre}::${it.punit.toFixed(2)}`;
+  } else {
+    selectedKey = null;
+  }
+
+  // Re-render en ambas tablas
+  renderTicket();
+  renderTicketModif();
+
+  // Re-enfocar selección en el modal si queda algo
+  if (selectedKey) {
+    requestAnimationFrame(() => highlightInModalByKey(selectedKey));
+  }
+  updateSelectedPreview();
+
+}
+
+function deleteAllLines() {
+  ticket.length = 0;
+  selectedKey = null;
+  renderTicket();
+  renderTicketModif();
+  updateSelectedPreview();
+}
+// helper para encontrar una línea por la clave compartida
+function findByKey(key){
+  return ticket.find(it => `${it.nombre}::${it.punit.toFixed(2)}` === key);
+}
+
+// refresca el texto del resumen en el hueco del modal
+function updateSelectedPreview(){
+  if (!$selPreview) return;
+  const it = selectedKey ? findByKey(selectedKey) : null;
+  if (!it){
+    $selPreview.textContent = '(sin línea seleccionada)';
+    return;
+  }
+  // “Descripción — cantidad × precioUnitario”
+  $selPreview.innerHTML = `<strong>${it.nombre}</strong> — ${it.cantidad} × ${eur(it.punit)}`;
+}
+
+    
   // 🚀 Init
   randomizeAll();
 });
+

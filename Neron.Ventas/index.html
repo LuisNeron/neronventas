@@ -41,11 +41,7 @@
           <div class="ticket-head">
             <div class="title">MOSTRADOR de CAFETERIA</div>
             <div class="pills">
-              <div class="pill" id="user-pill">
-                <a href="/Neron.Operadores/index.html" class="pill-link">
-                  <i class="fa-solid fa-user"></i> Usuario 1
-                </a>
-              </div>
+              <div class="pill" id="user-pill"><i class="fa-solid fa-user"></i> Usuario 1</div>
               <div class="pill" id="tarifa-pill">Tarifa 1</div>
             </div>
           </div>
@@ -69,9 +65,56 @@
               <button class="sysbtn sysbtn--mini sysbtn--accent" id="btn-rapidos">
                 <i class="fa-solid fa-bolt"></i><span>Artículos Rápidos</span>
               </button>
+              <button class="sysbtn sysbtn--mini sysbtn--accent" id="btn-modificar">
+                <span>Modificar</span>
+              </button>
             </div>
             <div class="big-total" id="ticket-total">0,00</div>
           </div>
+          <div id="modal-modificar" class="modal hidden">
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-content modificar">
+
+<div class="left-tablet-modal">
+  
+                <div class="ticket-grid">
+                  <table class="ticket-table">
+                    <thead>
+                      <tr>
+                        <th style="width:55%">Descripción</th>
+                        <th style="width:10%">Cant</th>
+                        <th style="width:15%">P.Unit</th>
+                        <th style="width:20%">P.V.P</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ticket-body-modif"><!-- JS --></tbody>
+                  </table>
+                </div>
+</div>
+
+              <div class="rigth-btns-modal">
+                <div class="selection-modal-modif"></div>
+                <div id="modificar-btns-modal">
+                  <button id="btn-borrar-linea" class="sysbtn sysbtn--accent">Borrar linea</button>
+                  <button class="sysbtn sysbtn--accent">Modificar importe</button>
+                  <button class="sysbtn sysbtn--accent">Modificar p. unitario</button>
+                  <button class="sysbtn sysbtn--accent">Modificar cantidad</button>
+                  <button id="btn-borrar-todo" class="sysbtn sysbtn--accent">Borrar todo</button>
+                  <button class="sysbtn sysbtn--accent">Descriptores</button>
+                  <button class="sysbtn sysbtn--accent">Orden de plato</button>
+                  <button class="sysbtn sysbtn--accent">Invitar todo</button>
+                  <button class="sysbtn sysbtn--accent">Invitar línea</button>
+                  <button class="sysbtn sysbtn--accent">Descuento</button>
+                  <button id="cerrar-modal-modificar" class="sysbtn sysbtn--accent">Cerrar</button>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+        
         </section>
 
         <!-- ===================== -->
@@ -88,27 +131,27 @@
         <!-- DIV 3: CONTROLS (IZQ + DER PARA EXTRAS) -->
         <!-- ===================== -->
         <section class="controls" aria-label="Controles y filtros">
-          <div class="controls-left">
-            <!-- Qty Pad: display arriba + keypad 3×3 -->
-            <div class="qtypad">
-              <div class="qtypad-left">
-                <!-- Display de cantidad -->
-                <div class="qty-display" id="qty-display" aria-live="polite">
-                  ×<span id="qty-value">1</span>
-                </div>
-                <div class="qty-grid qty-grid--2col">
-                  <button class="q" data-q="2">2</button>
-                  <button class="q" data-q="3">3</button>
+<div class="controls-left">
+  <!-- Qty Pad: display arriba + keypad 3×3 -->
+  <div class="qtypad">
+    <div class="qtypad-left">
+      <!-- Display de cantidad -->
+      <div class="qty-display" id="qty-display" aria-live="polite">
+        ×<span id="qty-value">1</span>
+      </div>
+<div class="qty-grid qty-grid--2col">
+  <button class="q" data-q="2">2</button>
+  <button class="q" data-q="3">3</button>
 
-                  <button class="q" data-q="4">4</button>
-                  <button class="q" data-q="5">5</button>
+  <button class="q" data-q="4">4</button>
+  <button class="q" data-q="5">5</button>
 
-                  <button class="q q-clear" id="qty-clear" title="Borrar cantidad">C</button>
-                  <button class="q q-apply" id="qty-apply" title="Aplicar cantidad">×</button>
-                </div>
-              </div>
-            </div>
-          </div>
+  <button class="q q-clear" id="qty-clear" title="Borrar cantidad">C</button>
+  <button class="q q-apply" id="qty-apply" title="Aplicar cantidad">×</button>
+</div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -128,7 +171,6 @@
             </div>
 
             <div class="control-right-down">
-
             </div>
           </div>
         </section>
@@ -137,12 +179,12 @@
         <!-- DIV 5: ARTÍCULOS -->
         <!-- ===================== -->
         <section class="articles-panel" aria-label="Artículos">
-          <div class="articles-header">
-            <input id="inputBuscar" class="search-input" placeholder="Buscar artículo…">
-            <h4 class="articles-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
-            <!-- antes había <div class="ah-spacer"></div> -->
-            <div id="clock-articles" class="articles-clock" aria-live="polite">--:--:--</div>
-          </div>
+<div class="articles-header">
+  <input id="inputBuscar" class="search-input" placeholder="Buscar artículo…">
+  <h4 class="articles-title">ARTÍCULOS <span id="familia-actual" class="familia-actual"></span></h4>
+  <!-- antes había <div class="ah-spacer"></div> -->
+  <div id="clock-articles" class="articles-clock" aria-live="polite">--:--:--</div>
+</div>
 
 
           <div class="products-grid" id="articulos"><!-- JS --></div>
